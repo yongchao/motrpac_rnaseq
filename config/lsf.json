@@ -1,0 +1,39 @@
+{
+    "__default__" :
+    {
+        "nCPUs"     : "1",
+        "time"      : "4:00",
+        "resources" : "\"rusage[mem=4000]\"",
+        "account"   : "acc_sealfs01a",
+        "queue"     : "premium",
+        "name"      : "{rule}.{wildcards.sample}",
+        "output"    : "log/cluster/{rule}.{wildcards.sample}.out",
+        "error"     : "log/cluster/{rule}.{wildcards.sample}.err"
+    },
+
+    "star_align" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "4:00",
+        "resources" : "\"rusage[mem=7000] span[ptile=6]\""
+    },
+
+    "rRNA" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+    },
+    "bowtie_align" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "4:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+    },
+    "rsem" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "24:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+    },
+}
