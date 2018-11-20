@@ -36,6 +36,10 @@ if [ ! -d $optc/conda-meta ]; then
     exit 1
 fi
 
+tmpdir=/sc/orga/scratch/$USER/tmp
+mkdir -p $tmpdir
+
 echo export MOTRPAC_ROOT=$optr
 echo export CONDA_ROOT=$optc
+echo export MOTRPAC_TMP=$tmpdir
 echo export PATH=$(de_duplicate $optc/bin:$optr/bin:$PATH)

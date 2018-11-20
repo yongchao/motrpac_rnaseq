@@ -1,0 +1,17 @@
+#module load anaconda3/5.0.1
+#conda create -p $PWD pip
+name: null
+channels:
+- bioconda
+- conda-forge
+- defaults
+dependencies:
+  - python=3.6.3
+  - rsem=1.2.21
+  - bowtie2=2.2.4
+  - cutadapt=1.16
+  - gcc=4.8.2
+  - pip:
+    - snakemake==5.2.1
+    - pip==18.0
+prefix: /sc/orga/scratch/gey01/conda_envs_new

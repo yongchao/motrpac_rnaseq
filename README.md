@@ -16,12 +16,12 @@ This repository contains the pipelines that are useful for the motrpac projects
 ## The frozen database and github code
 - A frozen copy of github code will be living at `/sc/orga/projects/sealfs01a/motrpac/`
 - The reference databases that are using the RNA-seq or RBBS or other MOP (including the genome and gtf version and software version) will be living at `/sc/orga/projects/sealfs01a/motrpac/refdata`
-= All users can modify the code in the github. For the moment, the conda and motrpac folders are only read only for the group. Yongchao is now taking the responsibility of 
+- All users can modify the code in the github. For the moment, the conda and motrpac folders are only read only for the group. Yongchao is now taking the responsibility of 
 changing the the conda enviroment and the frozen database and github code. This arrangement can be changed later.
 
 ## How to use
-- make sure that snakemake and other required scripts are in your path and setting up the envivonment variables 'MOTRPAC_ROOT' and 'CONDA_ROOT' by running `/sc/orga/projects/sealfs01a/motrpac/bin/load_motrpac.sh`, usin `-h` for user guide. Here you can setup different types of motracode and conda paths (default is to use the frozen as mentioned in the previous section)
+- make sure that snakemake and other required scripts are in your path and setting up the envivonment variables `MOTRPAC_ROOT` and `CONDA_ROOT` by running `/sc/orga/projects/sealfs01a/motrpac/bin/load_motrpac.sh`, usin `-h` for user guide. Here you can setup different types of motracode and conda paths (default is to use the frozen as mentioned in the previous section)
 - copy the commands emitted from the previous command to the terminal (this can be done better for future)
 - go to a project folder that contains a subfolder `fastq` where the fastq file names are specified according to the pipeline
 - Run the command according to the specific pipeline. For example, the rna-seq usage can be seen in the file [rna-seq_README.md](rna-seq_README.md)
-- When necessary, the motrpac environment can be unloaded by running the command $MOTRPAC_ROOT/bin/unload_motrpac.sh and copy the commands emitted to the terminal
+- When necessary, the motrpac environment can be unloaded by running the command `$MOTRPAC_ROOT/bin/unload_motrpac.sh` and copy the commands emitted to the terminal

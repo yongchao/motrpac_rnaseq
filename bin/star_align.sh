@@ -23,7 +23,7 @@ STAR  --genomeDir $gdir/star_index\
       --outFilterType BySJout\
       --runThreadN $threads\
       --outSAMtype BAM SortedByCoordinate\
-      --quantMode TranscriptomeSAM \
+      --quantMode TranscriptomeSAM
       #--genomeFastaFiles $gdir/genome.fa\
       #--sjdbGTFfile $gdir/genome.gtf\
       #--twopassMode Basic
@@ -33,3 +33,7 @@ STAR  --genomeDir $gdir/star_index\
       #--limitBAMsortRAM 15000000000
       #--genomeLoad NoSharedMemory\ doesn't seem to work, but it's the default anyway
       #--genomeLoad LoadAndKeep \ the MOP is wrong here
+
+##Modify the Log.final.out
+awk 'BEGIN{FS=OFS="\t"}; { if(NF==1) $0=$0"\t"; print}' star_align/$SID/Log.final.out >star_align/$SID/Log.final_filled.out
+

@@ -15,12 +15,13 @@ if [ "${CONDA_ROOT}" != x ]; then
     PATH=$(remove_path $PATH $CONDA_ROOT/bin)
 fi
 set -u
-set -x
+
 PATH=$(remove_path $PATH /sc/orga/projects/sealfs01a/motrpac/bin)
 PATH=$(remove_path $PATH /sc/orga/projects/sealfs01a/conda/python3/bin)
 
 echo export PATH=$PATH
 echo unset MOTRPAC_ROOT
 echo unset CONDA_ROOT
+echo unset MOTRPAC_TMP
 
 

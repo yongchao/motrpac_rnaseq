@@ -26,7 +26,7 @@ bowtie2 --local -p $threads -s --sam-nohead -x $rRNA $cmd >rRNA/$SID.sam 2>rRNA/
 
 ##The following is only needed when when want to investigate the bam file for details
 cd rRNA
-samtools view -b $SID.sam -o $SID_unsorted.bam
+samtools view -b $SID.sam -o ${SID}_unsorted.bam
 
 tmpdir=${SID}_samtools_tmp
 mkdir -p $tmpdir

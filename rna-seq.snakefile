@@ -35,7 +35,7 @@ def fastq_info(wildcards):
 gdir=config["genomedir"]
 samples,fastqc_samples=read_samples("sample_info.txt")
 
-localrules: all,fastqc_all,star_align_all,featureCounts_all,rsem_all,rRNA_all
+localrules: all,fastqc_all,star_align_all,featureCounts_all,rsem_all,rRNA_all,qc53_all
 
 rule all:
     input:
@@ -43,7 +43,8 @@ rule all:
         "log/OK.star_align",
         "log/OK.featureCounts",
         "log/OK.rsem",
-        "log/OK.rRNA"
+        "log/OK.rRNA",
+        "log/OK.qc53"
     output:
         "log/OK.all"
     shell:
@@ -69,7 +70,7 @@ rule star_align:
     output:
         bam="star_align/{sample}/Aligned.sortedByCoord.out.bam",
         rsem_bam="star_align/{sample}/Aligned.toTranscriptome.out.bam",
-        qc_log="star_align/{sample}/Log.final.out" 
+        qc_log="star_align/{sample}/Log.final_filled.out" 
     log:
         "star_align/log/{sample}.log"
     threads: 6
@@ -119,6 +120,39 @@ rule rRNA:
         '''
         {bin}/rRNA.sh {wildcards.sample} {gdir} {threads}
         '''
+rule qc53:
+    input:
+        "star_align/{sample}/Aligned.sortedByCoord.out.bam"
+    output:
+        "qc53/{sample}{grp,_[0-9]+-[0-9]+k}.RNA_Metrics" #grp . _1-2k., etc
+    log:
+        "qc53/log/{sample}{grp}.log"
+    shell:
+        '''
+        {bin}/qc53.sh {wildcards.sample} {wildcards.grp} {gdir} 
+        '''
+rule qc53_sample_all:
+    input:
+        expand("qc53/{{sample}}{grp}.RNA_Metrics",grp=["_0-0k","_0-1k","_1-2k","_2-3k","_3-4k","_4-6k","_6-10k","_10-0k"])
+    output:
+        "qc53/OK.{sample}"
+    shell:
+        '''
+        echo "finished sample {wildcards.sample}" > {output}
+        ''' 
+        
+rule qc53_all:
+    input:
+        expand("qc53/{sample}{grp}.RNA_Metrics",sample=samples,grp=["_0-0k","_0-1k","_1-2k","_2-3k","_3-4k","_4-6k","_6-10k","_10-0k"])
+    output:
+        "log/OK.qc53"
+    log:
+        "qc53/log/all.log"
+    shell:
+        '''
+        module load R
+        echo "finished all qc53" > {output}
+        '''
         
 rule fastqc_all:
     input:
@@ -135,20 +169,29 @@ rule featureCounts_all:
         expand("featureCounts/{sample}",sample=samples)
     output:
         "log/OK.featureCounts"
+    log:
+        "log/featureCounts.log"
     shell:
         '''
+        SID.sh 1 1 <sample_info.txt| awk '{{print "featureCounts/"$0"\t"$0}}' |
+        row_paste.awk infoid=1 colid=0 skip=1 >featureCounts.txt 2>{log}
         echo "Finished featureCounts" >{output}
         '''
         
 rule star_align_all:
     input:
-        expand("star_align/{sample}/Aligned.sortedByCoord.out.bam",sample=samples)
+        expand("star_align/{sample}/Log.final_filled.out",sample=samples)
     output:
         "log/OK.star_align"
+    log:
+        "log/star_align.log"
     shell:
         '''
+        SID.sh 1 1 <sample_info.txt| awk '{{print "star_align/"$0"/Log.final_filled.out\t"$0}}' |
+        row_paste.awk infoid=1 colid=0 skip=1 >star_align/star_QC.txt 2>{log}
         echo "Finished star_align" > {output}
         '''
+        
 rule rRNA_all:
     input:
         expand("rRNA/{sample}.txt",sample=samples)
@@ -158,7 +201,7 @@ rule rRNA_all:
         '''
         echo "Finished all rRNA" >{output}
         '''
-
+        
 rule rsem_all:
     input:
         expand("rsem/log/OK.{sample}",sample=samples)
@@ -168,6 +211,10 @@ rule rsem_all:
         "log/rsem.log"
     shell:
         '''
+        SID.sh 1 1 <sample_info.txt | awk '{{print "rsem/"$0".genes.results\t"$0}}'  > .samples.rsem
+        row_paste.awk colid=6 < .samples.rsem >rsem_genes_tpm.txt 2>{log}
+        row_paste.awk colid=7 < .samples.rsem >rsem_genes_fpkm.txt 2>>{log}
+        row_paste.awk colid=5 < .samples.rsem >{output} 2>>{log}
         echo "Finished rsem">{output}
         '''
         

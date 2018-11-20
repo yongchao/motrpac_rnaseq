@@ -1,0 +1,6 @@
+- *~
+- genome_index.snakefile
+- .git
+- .rsync-filter
+- refdata
+- snakemake_env.yml

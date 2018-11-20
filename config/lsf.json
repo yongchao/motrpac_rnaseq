@@ -36,4 +36,12 @@
         "time"      : "24:00",
         "resources" : "\"rusage[mem=6000] span[ptile=6]\""
     },
+    "qc53":
+    {
+        "resources" : "\"rusage[mem=20000]\"",
+        "time"      : "12:00",
+        "name"      : "{rule}.{wildcards.sample}.{wildcards.grp}",
+        "output"    : "log/cluster/{rule}.{wildcards.sample}.{wildcards.grp}.out",
+        "error"     : "log/cluster/{rule}.{wildcards.sample}.{wildcards.grp}.err"
+    },
 }
