@@ -3,13 +3,14 @@
 
 The initial MoTrPAC RNA-seq MOP: https://docs.google.com/document/d/1oz8jZAY9Rq4uqenp-0RMkQBhMtjsMLKlxfjlmRExSQ0/edit?ts=5b04a52e#
 
-**External softwares/packages installation and bash environmental setup
+## A. External softwares installation and bash environmental setup
 
-We are heavily relying on conda to install/update many bioinformatics softwares/packages with fixed versions. We will use the most updated softwares that are available at conda https://conda.io/miniconda.html . 
+### A.1 Conda installation 
+We are heavily relying on conda to install/update many bioinformatics software with the same fixed versions. Most updated softwares are available at conda https://conda.io/miniconda.html . 
 *   Install the python2 and python3 under the conda root folder `$conda` following the instructions at [conda_install.sh](bin/conda_install.sh)
-*   The last command at the file conda_install.sh installs the specified versions of software packages and their dependency packages.
+*   The last command at the file `conda_install.sh` installs the specified versions of software packages and their dependency packages.
+https://github.com/yongchao/motrpac/blob/2889fda8676128e1a7b2b7ecc5b6214b1d12e6c6/bin/conda_install.sh#L28-L39
 ```bash
-#This will be replaced by the permanent link
 conda install \
       python=3.6.6 \
       snakemake=5.3.0\
@@ -23,6 +24,8 @@ conda install \
       bowtie2=2.3.4.3\
       fastqc=0.11.8
 ```
+
+### A.2 bash environments setup
 We rely on the same set-up of conda installation folder structures so that the dependency softwares/packages (with the same versions) are portable. We need to setup some soft links under `MOTRPAC_ROOT` and  export the environmental variables `MOTRPAC_ROOT` and `PATH`
 *   `MOTRPAC_ROOT` is the root folder of the github code 
 *    Under the `MOTRPAC_ROOT` subfolder, we need to setup the softlinks below
@@ -31,12 +34,12 @@ We rely on the same set-up of conda installation folder structures so that the d
 	 *   `tmpdir` soft link that points to a temporary folder that has at least 100G of free space
 * `  export $(bin/load_motrpac.sh)`will export the environment variables `MOTRPAC_ROOT` and `PATH`
 
-**  Download the genome source data (fa and gtf from gencode and ensembl) and also build the bowtie\_index for the miscellaneous small data (globin and rRNA)
+### A.3 download the genome source and build the refdata
+*  Download the genome source data (fa and gtf from gencode and ensembl) and also build the bowtie2\_index for the miscellaneous small data (globin and rRNA)
   [source\_data.sh](bin/source_data.sh)
-**  Unzip the fa file and gtf file
-**  Make sure the gtf file and fa file from ensembl have "chr" in the chromosome name as in gencode data (see [fixchr4ensembl.sh](bin/fixchr4ensembl.sh))
-**  Sort the gtf file accordingly, these are in the file [genome.sh](bin/genome.sh)
-**Build the genome reference data
+*  Make sure the gtf file and fa file from ensembl have "chr" as part of the chromosome name as in gencode data (see [fixchr4ensembl.sh](bin/fixchr4ensembl.sh))
+*  Sort the gtf file accordingly, these are in the file [genome.sh](bin/genome.sh)
+*  Build the genome reference data
      *   [bowtie\_index](bin/bowtie_index.sh)
 	 *   [star\_index](bin/star_index.sh)
 	 *   [bowtie2\_index](bin/bowite2_index.sh)
@@ -47,29 +50,6 @@ For each genome folder that was downloaded by [source\_data.sh](bin/source_data.
 ``` cd  $MOTRPAC_ROOT/refdata/hg38_gencode_v29
 	snakemake -s $MOTRPAC_ROOT/genome_index.snakmake
 ```
-# B. Genome reference-specific analyses
-
-Section B requires different inputs for rat and human samples.  
-
-## B.1 Build genome index with STAR
-
-For rat (Rnor_6.0, Release 94), use the following files:  
-
-* Genome build (`GENOME_FASTA`): ftp://ftp.ensembl.org/pub/release-94/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz     
-* GTF (`GTF_FILE`): ftp://ftp.ensembl.org/pub/release-94/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.94.gtf.gz  
-
-For human (GRCh38.p12, Release 29), use the following files:  
-
-* Genome build (`GENOME_FASTA`): ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/GRCh38.p12.genome.fa.gz  
-* GTF (`GTF_FILE`): ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.annotation.gtf.gz  
-
-Parameters:  
-
-* `NUM_THREADS`: Number of threads to run on
-* `INDEX_DIRECTORY`: Output folder for the genome index
-* `OVERHANG`: splice-junction-data-base-overhang (sjdbOverhang) parameter for STAR. Should have a value of `read length – 1`, e.g. for read length 75 it should be set to 74.  
-
-Note that `GENOME_FASTA` and `GTF_FILE` cannot be in `.gz` format for compatibility with STAR (i.e. gunzip the files before running the following command).
 
 ```bash
 NUM_THREADS=10

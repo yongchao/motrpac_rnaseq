@@ -1,11 +1,12 @@
 #!/bin/bash 
 set -eu -o pipefail
 
-#Before running this, makesure refdata, conda and tmpdir under the MOTRPAC_ROOT have already been soft-linked to the right folders
+# Before running this, make sure refdata, conda and tmpdir
+# under $MOTRPAC_ROOT have already been soft-linked to the right folders
 
-#Running this WILL NOT change the enviromental variables
+# Running this WILL NOT change the enviromental variables
 
-#You need to run the comand below to export the the enviromental variables at the $MOTRPAC_ROOT and $PATH
+# You need to run the comand below to export the the enviromental variables $MOTRPAC_ROOT and $PATH
 #export $(bin/load_motrpac.sh)
 
 root=$(dirname $(dirname $(readlink -m $0))) #find out the real motrpac root folder
