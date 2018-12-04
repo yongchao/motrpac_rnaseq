@@ -1,15 +1,12 @@
-localrules: all
+localrules: all,genome,qc53_ref
 rule all:
     input:
         "log/OK.star_index",
         "log/OK.rsem_index",
         "log/OK.bowtie_index",
+        "log/OK.bismark_index",
         "log/OK.qc53_ref"
         
-samples, = glob_wildcards("{sample}")        
-wildcard_constraints:
-    sample="[^/]+" #do not allow to go to the sub directory
-    
 rule genome:
     output:
         "genome.gtf",
@@ -18,7 +15,7 @@ rule genome:
         "log/genome.log"
     shell:
         '''
-        genome.sh {log}
+        genome.sh >&{log}
         '''
         
 rule star_index:
@@ -32,7 +29,7 @@ rule star_index:
     threads: 6
     shell:
         '''
-        star_index.sh {threads} {log}
+        star_index.sh {threads} >&{log}
         echo OK >{output}
         '''
         
@@ -47,7 +44,7 @@ rule rsem_index:
     #threads: 6,not supported as of rsem 1.3.1
     shell:
         '''
-        rsem_index.sh {log}
+        rsem_index.sh >&{log}
         echo OK >{output}
         '''
         
@@ -61,7 +58,20 @@ rule bowtie_index:
     threads: 6
     shell:
         '''
-        bowtie2_index.sh {threads} {log}
+        bowtie2_index.sh {threads} >&{log}
+        echo OK >{output}
+        '''
+        
+rule bismark_index:
+    input:
+        "genome.fa"
+    output:
+        "log/OK.bismark_index"
+    log:
+        "bismark_index/log/build.log"
+    shell:
+        '''
+        bismark_index.sh >&{log}
         echo OK >{output}
         '''
         
@@ -74,6 +84,6 @@ rule qc53_ref:
         "qc53_ref/log/build.log"
     shell:
         '''
-        qc_53.ref.sh {log}
+        qc53_ref.sh >{log}
         echo OK >{output}
         '''

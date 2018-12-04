@@ -1,15 +1,13 @@
 #!/bin/bash -x
 set -eu -o pipefail
-SID=$1
-gdir=$2
-threads=$3
-shift 3
+
+gdir=$1
+threads=$2
+shift 2
+#The remaining one or two parameters are the input fastq files (can be one or two)
+SID=$(basename $1 _R1.fastq.gz)
 
 mkdir -p star_align/$SID
-
-set +x
-module load star/2.5.4b
-set -x
 
 #why is this required
 ulimit -v 41000000000
@@ -17,7 +15,7 @@ ulimit -v 41000000000
 STAR  --genomeDir $gdir/star_index\
       --sjdbOverhang  99\
       --readFilesIn "$@"\
-      --outFileNamePrefix star_align/$SID/\
+      --outFileNamePrefix star_align/${SID}/\
       --readFilesCommand zcat \
       --outSAMattributes NH HI AS NM MD nM\
       --outFilterType BySJout\
@@ -33,7 +31,3 @@ STAR  --genomeDir $gdir/star_index\
       #--limitBAMsortRAM 15000000000
       #--genomeLoad NoSharedMemory\ doesn't seem to work, but it's the default anyway
       #--genomeLoad LoadAndKeep \ the MOP is wrong here
-
-##Modify the Log.final.out
-awk 'BEGIN{FS=OFS="\t"}; { if(NF==1) $0=$0"\t"; print}' star_align/$SID/Log.final.out >star_align/$SID/Log.final_filled.out
-

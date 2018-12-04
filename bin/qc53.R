@@ -1,10 +1,11 @@
-#!/hpc/packages/minerva-common/R/3.3.1/lib64/R/bin/Rscript --vanilla
-##work ont the qc53.plot
-#the folder should be in the parent folder of qc53, the project folder
+#!/usr/bin/env Rscript
+#Note --vanilla is supported only for the actual data
+##work ont the qc53.plot and collect qc53.txt
+#the program should be run in the project folder, the parent folder of qc53
 options(stringsAsFactors=FALSE)
 .DEBUG=interactive()
 if(.DEBUG){
-    Args<-"sample_info.txt"
+    Args<-"samples_all"
 }else{
     Args <-commandArgs(TRUE)
 }
@@ -12,7 +13,7 @@ if(.DEBUG){
 if(length(Args)>=1){
     file.samples<-Args[1]
 }else{
-    file.samples<-"sample_info.txt"
+    file.samples<-"samples_all"
 }
 
 if(length(Args)>=2){
@@ -22,22 +23,14 @@ if(length(Args)>=2){
 }
 
 
-sample.info<-read.delim(file.samples,sep="\t",head=TRUE,row.names=1,check.names=FALSE)
-samples<-row.names(sample.info)
-if ("label" %in% colnames(sample.info)){
-    labels<-sample.info[,"label"]
-    names(labels)<-samples
-}else{
-    labels<-samples
-}
-    
+samples<-scan(file.samples,"",quiet=TRUE)
+files<-file.path("qc53",paste0(samples,".RNA_Metrics"))
 n<-length(samples)
 x<-NULL
 head<-NULL
 for(i in 1:length(samples)){
-    filei<-file.path("qc53",paste0(samples[i],"_0-0k.RNA_Metrics"))
-    x<-cbind(x,scan(filei,"",sep="\t",skip=7,nline=1,quiet=TRUE))
-    headi<-scan(filei,"",sep="\t",skip=6,nline=1,quiet=TRUE)
+    x<-cbind(x,scan(files[i],"",sep="\t",skip=7,nline=1,quiet=TRUE))
+    headi<-scan(files[i],"",sep="\t",skip=6,nline=1,quiet=TRUE)
     if(is.null(head)){
         head<-headi
     }else{
@@ -47,80 +40,48 @@ for(i in 1:length(samples)){
     }
 }
 dimnames(x)<-list(head,samples)
-write.table(x, file.path("qc53",paste0(proj,".txt")),
+write.table(x, paste0(proj,".txt"),
             sep="\t",col.names=NA,row.names=TRUE)
             
-types<-paste0(c("0-0","0-1","1-2","2-3","3-4","4-6","6-10","10-0"),"k")
-if(n<=8){
-    cols<-palette()[1:n] #only eight colors
-}else{
-    #if(n<=14){
-    #library(RColorBrewer)
-    #cols<-c("black","gray",brewer.pal(n-2,"Paired"))
-#}else{
-    pal<-matrix(c(0,0,0,
-                  1,0,0,
-                  0,1,0,
-                  0,0,1,
-                  1,1,0,
-                  0,1,1,
-                  1,0,1),ncol=3,byrow=TRUE)
-    seg<-1:ceiling(n/nrow(pal))
-    cols<-matrix("",nrow=length(seg),ncol=7)
-    for(i in seg){
-        cols[i,]<-rgb(pal[,1],pal[,2],pal[,3],i/length(seg))
-    }
-    cols<-c(cols)[1:n]
-}
-pdf(file.path("qc53",paste0(proj,".pdf")),
+##Plot every 8 samples, with the 
+cols<-palette()[1:8] #only eight colors
+pdf(paste0(proj,".pdf"),
     width=8.5,height=11)
 par(mfrow=c(2,1))
-for(j in 1:length(types)){
-    cat("Running", types[j],"\n")
+nP<-ceiling(length(samples)/8)
+for(i in 1:nP){
+    locK<-((i-1)*8+1):min(i*8,length(samples))
+    ##checking no data case
     x<-NULL
-    samplesj<-NULL
-    for(i in 1:length(samples)){
-        filei<-file.path("qc53",paste0(samples[i],"_",types[j],".RNA_Metrics"))
-        zz<-pipe(paste0("wc -l ",filei))
+    for(k in locK){
+        zz<-pipe(paste0("wc -l ",files[k]))
         nl<-scan(zz,n=1,quiet=TRUE)
         close(zz)
         if(nl==10){
-            ##no data, we need to skip
+        ##no data, we need to skip
             next
         }
-        xi<-read.delim(filei,sep="\t",skip=10,head=TRUE,nrows=101,row.names=1)
-        if(length(samplesj)==0){
-            x<-xi
-        }else{
-            if(sum(rownames(xi)!=rownames(x))!=0){
-                stop("Error in reading file",filei,"\n")
-            }
-            x<-cbind(x,xi)
+        xk<-read.delim(files[k],sep="\t",skip=10,head=TRUE,nrows=101,row.names=1)
+        if(is.null(x)){
+            x<-xk
+        }else if(sum(rownames(x)!=rownames(xk))!=0){
+            stop("Error in reading file",files[k],"\n")
+        }else{    
+            x<-cbind(x,xk)
         }
-        samplesj<-c(samplesj,samples[i])
+        colnames(x)[ncol(x)]<-samples[k]
     }
-
-    if(is.null(x)){
-        next #with no data for any sample, skip
+    if(!is.null(x)){
+        x<-data.matrix(x)
+        pos<-as.numeric(rownames(x))
+        xrng<-range(pos)
+        yrng<-range(x)
+        plot(xrng,yrng,type="n",xlab="5prime to 3prime positions",ylab="normalized average read coverage")
+        for(i in 1:ncol(x)){
+            lines(pos,x[,i],col=cols[i])
+        }
+        legend("bottom",
+               legend=colnames(x),col=cols,lty=1,cex=0.6)
     }
-    colnames(x)<-samplesj
-    x<-data.matrix(x)
-    pos<-as.numeric(rownames(x))
-    xrng<-range(pos)
-    yrng<-range(x)
-    main<-types[j]
-    if(main=="0-0k"){
-        main<-"default (all)"
-    }else if(main=="10-0k"){
-        main<-"10k+"
-    }
-    
-    plot(xrng,yrng,type="n",xlab="5prime to 3prime positions",ylab="normalized average read coverage",main=main)
-    for(i in 1:ncol(x)){
-        lines(pos,x[,i],col=cols[i])
-    }
-    legend("bottom",
-           legend=labels[samplesj],col=cols,lty=1,cex=0.6)
 }
-
 dev.off()

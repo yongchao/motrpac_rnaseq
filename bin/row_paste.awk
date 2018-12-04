@@ -5,11 +5,11 @@
 #if it has only one column, then the file name is also the sample.id
 ##collect all of the data from many samples
 ##Assuming one line for the file header
+##skip==-1, means no header
 ##And Tab delimited file
 BEGIN{
     FS=OFS="\t"
-    #tmpdir=ENVIRON["MOTRPAC_TMP"]
-    tmpdir="/sc/orga/scratch/"ENVIRON["USER"]"/tmp"
+    tmpdir=ENVIRON["MOTRPAC_ROOT"]"/tmpdir"
     system("mkdir -p "tmpdir)
     outfile=gettmpfilename(tmpdir)
     out1file=gettmpfilename(tmpdir)
@@ -26,11 +26,14 @@ BEGIN{
     #print "headerfile="headerfile"\n" >"/dev/stderr"
 }
 NR==1{
-    tailh="tail -n +"skip+1" "#with the head line
     tailm="tail -n +"skip+2" "#just the main content
+    if(skip==-1){
+	tailh="head -1 " #a fake head line
+    }else{
+	tailh="head -"skip+1" |tail -1 "#with the head line
+    }
 
     tailh $1 | getline header
-    print header >headerfile
     nf=split(header,headv,"\t")
     if(infoid==0){
 	 infoid=1
@@ -43,13 +46,14 @@ NR==1{
     print "infoid="infoid >"/dev/stderr"
     print "colid="colid >"/dev/stderr"
 
-    close(headerfile)
-    cmd="cut -f "infoid" "headerfile
-    #print cmd>"/dev/stderr"
-    cmd|getline outhead
+    if(skip>=0){
+	outhead=headv[colid]
+    }else{
+	outhead="field"
+    }
     
     sample=$1
-    if(NF>=2){
+    if(NF>=2){#the last column may become the label
 	sample=$2
     }
 

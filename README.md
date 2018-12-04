@@ -1,13 +1,13 @@
 # snakemake implementation of MoTrPAC RNA-seq pipeline
-**Contact:** Yongchao Ge (yogncaho.ge@mssm.edu)
+**Contact:** Yongchao Ge (yognchao.ge@mssm.edu)
 
 The initial MoTrPAC RNA-seq MOP: https://docs.google.com/document/d/1oz8jZAY9Rq4uqenp-0RMkQBhMtjsMLKlxfjlmRExSQ0/edit?ts=5b04a52e#
 
 **External softwares/packages installation and bash environmental setup
 
-We are heavily relying on conda to install/update many bioinformatics softwares/packages with fixed versions. We will use the most updated softwares that are available at conda https://conda.io/miniconda.html_ . 
-* Install the python2 and python3 under the conda root folder `$conda` following the instructions at [conda_install.sh](bin/conda_install.sh)
-* The last command at the file conda_install.sh installs the specified versions of software packages and their dependency packages.
+We are heavily relying on conda to install/update many bioinformatics softwares/packages with fixed versions. We will use the most updated softwares that are available at conda https://conda.io/miniconda.html . 
+*   Install the python2 and python3 under the conda root folder `$conda` following the instructions at [conda_install.sh](bin/conda_install.sh)
+*   The last command at the file conda_install.sh installs the specified versions of software packages and their dependency packages.
 ```bash
 #This will be replaced by the permanent link
 conda install \
@@ -23,99 +23,73 @@ conda install \
       bowtie2=2.3.4.3\
       fastqc=0.11.8
 ```
-We rely on the same set-up of conda installation folder structures so that the dependency softwares/packages (with the same versions) are portable. We also need to export the environmental variables `MOTRPAC_ROOT` and `CONDA_ROOT` and `MOTRPAC_TMP`
-* `MOTRPAC_ROOT` is the root folder of the github code 
-* `CONDA_ROOT` is the root folder of the conda python3 installation `$conda/python3`
-* `MOTRPAC_TMP` is a temporary folder that can handle a lot of space. The default folder /tmp has limited space in the nodes of Sinai clusters
-*  Under the `MOTRPAC_ROOT` subfolder, we require a `refdata` soft link that links to the genome data index. The command can be issued by `cd $MOTRPAC_ROOT; ln -s $refdata .`
-* `export $(bin/load_motrpac.sh -c $conda/python3)` will setup all the necessary environments for Sinai people. Other sites probably need to use different values of `-t` to specify the temporary folder `MOTRPAC_TMP`
+We rely on the same set-up of conda installation folder structures so that the dependency softwares/packages (with the same versions) are portable. We need to setup some soft links under `MOTRPAC_ROOT` and  export the environmental variables `MOTRPAC_ROOT` and `PATH`
+*   `MOTRPAC_ROOT` is the root folder of the github code 
+*    Under the `MOTRPAC_ROOT` subfolder, we need to setup the softlinks below
+     *   `refdata` soft link that points to the genome data index folder. e.g. `cd $MOTRPAC_ROOT; ln -s $refdata .`
+	 *   `conda` soft link that points to conda installation folder. e.g. `cd $MOTRPAC_ROOT; ln -s $conda .`
+	 *   `tmpdir` soft link that points to a temporary folder that has at least 100G of free space
+* `  export $(bin/load_motrpac.sh)`will export the environment variables `MOTRPAC_ROOT` and `PATH`
 
-The folder structure refdata can be built at the refdata with the command
-`snakemake -s $MOTRPAC_ROOT/refdata.snakemake`
+**  Download the genome source data (fa and gtf from gencode and ensembl) and also build the bowtie\_index for the miscellaneous small data (globin and rRNA)
+  [source\_data.sh](bin/source_data.sh)
+**  Unzip the fa file and gtf file
+**  Make sure the gtf file and fa file from ensembl have "chr" in the chromosome name as in gencode data (see [fixchr4ensembl.sh](bin/fixchr4ensembl.sh))
+**  Sort the gtf file accordingly, these are in the file [genome.sh](bin/genome.sh)
+**Build the genome reference data
+     *   [bowtie\_index](bin/bowtie_index.sh)
+	 *   [star\_index](bin/star_index.sh)
+	 *   [bowtie2\_index](bin/bowite2_index.sh)
+     *   [rsem\_index](bin/rsem_index.sh)
 
-## Outline  
+	 
+For each genome folder that was downloaded by [source\_data.sh](bin/source_data.sh). The genome data and index for the refdata can be built at the refdata with the command, for example hg38_gencode_v29
+``` cd  $MOTRPAC_ROOT/refdata/hg38_gencode_v29
+	snakemake -s $MOTRPAC_ROOT/genome_index.snakmake
+```
+# B. Genome reference-specific analyses
 
-######
-##### A. Pre-alignment sample processing and QC
+Section B requires different inputs for rat and human samples.  
 
-* A.1 Pre-alignment QC with MultiQC and FASTQC
-* A1.1 Run FASTQC on each pair of FASTQ files
-* A.1.2 MultiQC
-* A.2 Adapter trimming  
+## B.1 Build genome index with STAR
 
-##### B. Genome reference-specific analyses 
+For rat (Rnor_6.0, Release 94), use the following files:  
 
-* B.1 Build genome index with STAR
-* B.2 Alignment
-* B.3 Quantification
-* B.3.1 Prepare RSEM reference
-* B.3.2 Run quantification 
-* B.4 Post-alignment QC
-* B.4.1 RNA-seq metrics with Picard CollectRnaSeqMetrics
-* B.4.2 Count alignments by segment 
-* B.4.3 Calculate % contamininants (rRNA and globin)
-* B.4.3.1 Build bowtie indices for rRNA and globin FASTA files 
-* B.4.3.2 Align raw FASTQ files to rRNA and globin bowtie2 indices  
+* Genome build (`GENOME_FASTA`): ftp://ftp.ensembl.org/pub/release-94/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz     
+* GTF (`GTF_FILE`): ftp://ftp.ensembl.org/pub/release-94/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.94.gtf.gz  
 
-##### C. Compile important metrics
+For human (GRCh38.p12, Release 29), use the following files:  
 
-* C.1 Summarize alignment metrics from STAR with MultiQC 
-* C.2 Mark PCR duplicates
-* C.3 Compile important metrics into a single report 
-
-##### D. Flag problematic samples 
-##### E. Post-Quantification QC 
-
-# A. Pre-alignment sample processing and QC
-
-Section A is **not** genome reference-specific. The same steps can be run on both human and rat samples simultaneously.
-
-## A.1 Pre-alignment QC with MultiQC and FASTQC
-
-### A1.1 Run FASTQC on each pair of FASTQ files
-
-This step will generate a single zipped folder and html file for each FASTQ file. The folder contains metrics about read quality. 
+* Genome build (`GENOME_FASTA`): ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/GRCh38.p12.genome.fa.gz  
+* GTF (`GTF_FILE`): ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.annotation.gtf.gz  
 
 Parameters:  
 
-* `FASTQ_DIR`: Input directory that contains FASTQ files. The following code assumes that there are gzipped, paired R1 and R2 files for each sample, and it excludes "Undetermined" FASTQ files generated by `bcl2fastq`. 
-* `OUTPUT_DIR`: Output folder for FASTQC reports
-* `ADAPTER_FILE`: A tab-delimited file that contains expected adapter sequences. See `data/adapter.tsv` for a usable example.  
+* `NUM_THREADS`: Number of threads to run on
+* `INDEX_DIRECTORY`: Output folder for the genome index
+* `OVERHANG`: splice-junction-data-base-overhang (sjdbOverhang) parameter for STAR. Should have a value of `read length – 1`, e.g. for read length 75 it should be set to 74.  
 
-The following code assumes that the paired FASTQ files are named with the format `ANY_SAMPLE_NAME_R1_001.fastq.gz` and `ANY_SAMPLE_NAME_R2_001.fastq.gz`.  
-
-```bash
-for prefix in `ls ${FASTQ_DIR} | grep "fastq.gz" |  grep -v "_I1_" | grep -v "Undetermined" | sed "s/_R[0-9]_001\..*//" | uniq`; do 
-	r1=`ls ${FASTQ_DIR} | grep ${prefix} | grep "R1_001.fastq.gz"`
-	r2=`ls ${FASTQ_DIR} | grep ${prefix} | grep "R2_001.fastq.gz"`
-	fastqc -o ${OUTPUT_DIR} -t 12 -f fastq -a $ADAPTER_FILE 
-done
-```
-
-### A.1.2 MultiQC
-
-MultiQC compiles all log files from analysis and processing tools and combines them into a single report. Run MultiQC on all directories containing outputs from FastQC:
-
-Parameters:  
-
-* `OUTPUT_DIR`: Output folder for MultiQC report
-* `FASTQC_DIR_N`: Directory/directories containing FASTQC reports from the previous step. Include as many directories as needed (minimum 1).
-
-Options:  
-
-* `-d`: Prepend the directory to file names (useful for keeping track of samples in multiple runs)  
-* `-f`: Overwrite existing MultiQC reports in `OUTPUT_DIR`  
+Note that `GENOME_FASTA` and `GTF_FILE` cannot be in `.gz` format for compatibility with STAR (i.e. gunzip the files before running the following command).
 
 ```bash
-multiqc \
-	-d \
-	-f \
-	-n $REPORT_NAME \
-	-o $OUTPUT_DIR \
-	$FASTQC_DIR_1 \
-	$FASTQC_DIR_2 
+NUM_THREADS=10
+OVERHANG=99 # for 2x75 NextSeq and MiSeq runs
+
+STAR \
+	--runThreadN $NUM_THREADS \
+	--runMode genomeGenerate \
+	--genomeDir $INDEX_DIRECTORY \
+	--genomeFastaFiles $GENOME_FASTA \
+	--sjdbGTFfile $GTF_FILE \
+	--sjdbOverhang $OVERHANG
 ```
 
+# A. bcl2fastq
+    [bcl2fastq.sh](bin/bcl2fastq.sh) generates three fastq files, R1, I1 and R2.
+	All of the fastq files can be softlinked with `${SID}_R1.fastq.gz`, `${SID}_I1.fastq.gz` and `${SID}_I1.fastq.gz`, where `SID` is the sample id. And all of these files are saved in the sub folder `fastq_raw`
+# B.  Pre-alignment sample processing and QC
+
+### A1.1 Run FASTQC on all FASTQ files on the fastq file in fastq_raw folder
 ## A.2 Adapter trimming
 
 For each paired-end FASTQ file (`${SAMPLE}\_R1_001.fastq.gz` and `${SAMPLE}\_R2_001.fastq.gz`), remove adapters (set using INDEXED_ADAPTER_PREFIX and UNIVERSAL_ADAPTER) using cutadapt v1.16. Eliminate reads that are too short after removing adapters and save trimmed FASTQ files (`${SAMPLE}\_R1_001.trimmed.fastq.gz` and `${SAMPLE}\_R2_001.trimmed.fastq.gz`). Save reads that were trimmed because they were too short in `${prefix}_R[1-2]_001.tooshort.fastq.gz`.  
@@ -145,43 +119,32 @@ for prefix in `ls ${FASTQ_DIR} | grep "fastq.gz" |  grep -v "_I1_" | sed "s/_R[0
  		${FASTQ_DIR}/${r1} ${FASTQ_DIR}/${r2} 
 done
 ```
+### A1.1 Run FASTQC on all FASTQ files on the fastq file in fastq_trim folder
 
-# B. Genome reference-specific analyses
-
-Section B requires different inputs for rat and human samples.  
-
-## B.1 Build genome index with STAR
-
-For rat (Rnor_6.0, Release 94), use the following files:  
-
-* Genome build (`GENOME_FASTA`): ftp://ftp.ensembl.org/pub/release-94/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz     
-* GTF (`GTF_FILE`): ftp://ftp.ensembl.org/pub/release-94/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.94.gtf.gz  
-
-For human (GRCh38.p12, Release 29), use the following files:  
-
-* Genome build (`GENOME_FASTA`): ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/GRCh38.p12.genome.fa.gz  
-* GTF (`GTF_FILE`): ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.annotation.gtf.gz  
+### A.1.2 MultiQC for pre-aligned data, collecting the QC metrics on the fastqc, fastqc_raw and fastq\_trim folders
 
 Parameters:  
 
-* `NUM_THREADS`: Number of threads to run on
-* `INDEX_DIRECTORY`: Output folder for the genome index
-* `OVERHANG`: splice-junction-data-base-overhang (sjdbOverhang) parameter for STAR. Should have a value of `read length – 1`, e.g. for read length 75 it should be set to 74.  
+* `OUTPUT_DIR`: Output folder for MultiQC report
+* `FASTQC_DIR_N`: Directory/directories containing FASTQC reports from the previous step. Include as many directories as needed (minimum 1).
 
-Note that `GENOME_FASTA` and `GTF_FILE` cannot be in `.gz` format for compatibility with STAR (i.e. gunzip the files before running the following command).
+Options:  
+
+* `-d`: Prepend the directory to file names (useful for keeping track of samples in multiple runs)  
+* `-f`: Overwrite existing MultiQC reports in `OUTPUT_DIR`  
 
 ```bash
-NUM_THREADS=10
-OVERHANG=74 # for 2x75 NextSeq and MiSeq runs
-
-STAR \
-	--runThreadN $NUM_THREADS \
-	--runMode genomeGenerate \
-	--genomeDir $INDEX_DIRECTORY \
-	--genomeFastaFiles $GENOME_FASTA \
-	--sjdbGTFfile $GTF_FILE \
-	--sjdbOverhang $OVERHANG
+multiqc \
+	-d \
+	-f \
+	-n $REPORT_NAME \
+	-o $OUTPUT_DIR \
+	$FASTQC_DIR_1 \
+	$FASTQC_DIR_2 
 ```
+
+
+
 
 ## B.2 Alignment 
 

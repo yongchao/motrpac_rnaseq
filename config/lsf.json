@@ -11,6 +11,44 @@
         "error"     : "log/cluster/{rule}.{wildcards.sample}.err"
     },
 
+    "star_index" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\"",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    
+    "rsem_index" :
+    {
+        "nCPUs"     : "1",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=36000]\"",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    "bismark_index" :
+    {
+        "nCPUs"     : "1",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=36000]\"",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    "bowtie_index" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\"",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    
     "star_align" :
     {
         "nCPUs"     : "6",
@@ -24,11 +62,29 @@
         "time"      : "12:00",
         "resources" : "\"rusage[mem=6000] span[ptile=6]\""
     },
+    "globin" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+    },
+    "phix" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+    },
     "bowtie_align" :
     {
         "nCPUs"     : "6",
         "time"      : "4:00",
         "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+    },
+    "bismark":
+    {
+        "nCPUs"     : "20",
+        "time"      : "24:00",
+        "resources" : "\"rusage[mem=3000] span[ptile=24]\""
     },
     "rsem" :
     {
@@ -39,9 +95,6 @@
     "qc53":
     {
         "resources" : "\"rusage[mem=20000]\"",
-        "time"      : "12:00",
-        "name"      : "{rule}.{wildcards.sample}.{wildcards.grp}",
-        "output"    : "log/cluster/{rule}.{wildcards.sample}.{wildcards.grp}.out",
-        "error"     : "log/cluster/{rule}.{wildcards.sample}.{wildcards.grp}.err"
+        "time"      : "12:00"
     },
 }
