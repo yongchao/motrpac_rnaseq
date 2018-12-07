@@ -287,7 +287,7 @@ The implementation is in the file [mark\_dup.sh](bin/mark_dup.sh)
   * %umi_mrna
   * umi_median\_5'\_3'\_bias
 
-## E.6 Alignment metrics from STAR's ${SAMPLE}\_Log.final.out files
+## E.6 Alignment metrics from STAR's star\_align/${SID}_Log.final.out files
 * avg\_input\_read\_length
 * uniquely\_mapped
 * %uniquely\_mapped	
@@ -304,7 +304,7 @@ The implementation is in the file [mark\_dup.sh](bin/mark_dup.sh)
 * %unmapped\_tooshort	
 * %unmapped\_other	
 * %chimeric
-## E.7 Alignment metrics from RSEM ${SAMPLE}.stat/${SAMPLE}.cnt files, also for UMI duplicated removed files
+## E.7 Alignment metrics from RSEM rsem/${SID}.stat/${SID}.cnt files, also for UMI duplicated removed files
 *Is this section necessary?*
 * N\_ALIGNABLE: 
 * N\_UNIQUE: 
@@ -313,7 +313,7 @@ The implementation is in the file [mark\_dup.sh](bin/mark_dup.sh)
 * N\_TOTAL\_ALIGNMENTS: 
 
 ## E.7 Alignment metrics,also for UMI duplicated removed files
-See the file [bam_chrinfo.sh](bin/chrinfo.sh) for details
+See the file [bam\_chrinfo.sh](bin/bam_chrinfo.sh) for details
 * for original bam file, `star_align/${SID}`. In the calculation, we only considered the primary alignment.
   * %chrX:  % of reads mapped to ChrX
   * %chrY:  % of reads mapped to ChrY
