@@ -248,7 +248,7 @@ multiqc \
 	fastqc fastqc fastqc_raw
 ```
 # E Compile important metrics from the MultiQC output and other log files
-The R script [qc.R](qc.R) collects all of the important the QC metrics from multiQC output and other log files. All of the metrics have been saved
+The R script [qc.R](bin/qc.R) collects all of the important the QC metrics from multiQC output and other log files. All of the metrics have been saved
 into the file `qc_info.txt` after the pipeline finishes.
 
 ## E.1 fastq metrics (raw and trimmed), collected from pre-alignment QC (see section C.5).
