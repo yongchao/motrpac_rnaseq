@@ -330,7 +330,17 @@ rule qc53:
         '''
         qc53.sh {input} {gdir} 
         '''
-        
+rule mark_dup:
+    input:
+        "star_align/{sample}/Aligned.sortedByCoord.out.bam"
+    output:
+        "mark_dup/{sample}.dup_metrics"
+    log:
+        "mark_dup/log/{sample}.log"
+    shell:
+        '''
+        mark_dup.sh {input} >&{log}
+        '''
 rule featureCounts_all:
     input:
         expand("featureCounts/{sample}",sample=samples_all),
@@ -414,6 +424,7 @@ rule qc_all:
         expand("phix/{sample}.txt",sample=samples),
         expand("rRNA/{sample}.txt",sample=samples),
         expand("star_align/{sample}/chr_info.txt",sample=samples_all),
+        expand("mark_dup/{sample}.dup_metrics",sample=samples),
         "log/OK.pre_align_QC",
         "log/OK.post_align_QC"
     output:

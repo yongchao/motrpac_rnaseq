@@ -2,7 +2,7 @@
 #It will install python2 and python3 respectively at the folder $conda/python2 and $conda/python3 and other bioninfomratics softwares/packages
 #required by motrpac
 
-#$conda will be eventually pointed by MOTRPAC_CONDA
+#$conda will be eventually pointed by MOTRPAC_conda
 
 cd $conda
 

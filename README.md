@@ -2,7 +2,7 @@
 **Contact:** Yongchao Ge (yongchao.ge@mssm.edu)
 
 * The initial MoTrPAC RNA-seq MOP: https://docs.google.com/document/d/1oz8jZAY9Rq4uqenp-0RMkQBhMtjsMLKlxfjlmRExSQ0/edit?ts=5b04a52e#
-* This README file was also consulted with Nicole Renee Gay's implementation https://bitbucket.org/nicolerg/motrpac\_rna\_mop 
+* This README file was also consulted with Nicole Renee Gay's implementation https://bitbucket.org/nicolerg/motrpac_rna_mop 
 
 # A. External softwares installation and bash environmental setup
 
@@ -248,7 +248,8 @@ multiqc \
 	fastqc fastqc fastqc_raw
 ```
 # E Compile important metrics from the MultiQC output and other log files
-The R script [qc.R](qc.R) collects all of the important the QC metrics from multiQC output and other log files.
+The R script [qc.R](qc.R) collects all of the important the QC metrics from multiQC output and other log files. All of the metrics have been saved
+into the file `qc_info.txt` after the pipeline finishes.
 
 ## E.1 fastq metrics (raw and trimmed), collected from pre-alignment QC (see section C.5).
 For paired ends fastq files, the metrics has been averaged between the two files to get a single metric.
@@ -264,11 +265,13 @@ For paired ends fastq files, the metrics has been averaged between the two files
 * %globin
 * %ERCC
 * %phix
-
-## E.3 The PCR duplication rate assessed with UMI technique (see section D.5)
+## E.3 The PCR duplication rate marked by PICARD MarkDuplicates
+The implementation is in the file [mark\_dup.sh](bin/mark_dup.sh)
+* %dup_picard
+## E.4 The PCR duplication rate assessed with UMI technique (see section D.5)
 * %umi_dup
 
-## E.4 Post\-alignment RNA-seq metrics from Picard's CollectRnaSeqMetrics output files, also for UMI duplicated removed files
+## E.5 Post\-alignment RNA-seq metrics from Picard's CollectRnaSeqMetrics output files, also for UMI duplicated removed files
 * The important metrics obtained from the Picard's CollectRnaSeqMetrics output file. 
   * %coding: % of bases mapped to coding
   * %utr: % of bases mapped to UTR
@@ -284,10 +287,24 @@ For paired ends fastq files, the metrics has been averaged between the two files
   * %umi_mrna
   * umi_median\_5'\_3'\_bias
 
-## E.4 Alignment metrics from STAR's ${SAMPLE}\_Log.final.out files
-
-
-## E.5 Alignment metrics from RSEM ${SAMPLE}.stat/${SAMPLE}.cnt files, also for UMI duplicated removed files
+## E.6 Alignment metrics from STAR's ${SAMPLE}\_Log.final.out files
+* avg\_input\_read\_length
+* uniquely\_mapped
+* %uniquely\_mapped	
+* avg\_mapped\_read\_length	
+* num\_splices	
+* num\_annotated_splices	
+* num\_GTAG\_splices	
+* num\_GCAG\_splices	
+* num\_ATAC\_splices	
+* num\_noncanonical\_splices	
+* %multimapped	
+* %multimapped\_toomany	
+* %unmapped\_mismatches	
+* %unmapped\_tooshort	
+* %unmapped\_other	
+* %chimeric
+## E.7 Alignment metrics from RSEM ${SAMPLE}.stat/${SAMPLE}.cnt files, also for UMI duplicated removed files
 *Is this section necessary?*
 * N\_ALIGNABLE: 
 * N\_UNIQUE: 
@@ -295,7 +312,7 @@ For paired ends fastq files, the metrics has been averaged between the two files
 * N\_UNCERTAIN:
 * N\_TOTAL\_ALIGNMENTS: 
 
-## E.6 Alignment metrics,also for UMI duplicated removed files
+## E.7 Alignment metrics,also for UMI duplicated removed files
 See the file [bam_chrinfo.sh](bin/chrinfo.sh) for details
 * for original bam file, `star_align/${SID}`. In the calculation, we only considered the primary alignment.
   * %chrX:  % of reads mapped to ChrX
