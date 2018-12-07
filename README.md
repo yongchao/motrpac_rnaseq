@@ -201,7 +201,7 @@ rsem-calculate-expression \
     rsem/$SID
 ```
 ## D.3A Prepare bowtie2 index for globin and rRNA and ERCC and phix
-This is only needed to be done once and is implemented in the file [source\_data.sh](bin/source\_data.sh). The following is the essential part for human rRNA bowtie2 index
+This is only needed to be done once and is implemented in the file [source\_data.sh](bin/source_data.sh). The following is the essential part for human rRNA bowtie2 index
 ```
 bowtie2-build hg_rRNA.fa $hg_rRNAref
 ```
@@ -219,7 +219,7 @@ bowtie2 -p $threads \
 * refFlat files are required for  Picard CollectRnaSeqMetrics. The refFlat file is generated from the GTF file of each genome folder under `MOTRPAC_refdata`. The implementation details can be seen in [qc53\_ref.sh](bin/qc53_ref.sh)
 ### D.4B Collect RNA-seq metrics with Picard CollectRnaSeqMetrics
 Compute post alignment QC metrics, including % mapped to coding, intron, intergenic, UTR, and % correct strand, and 5’ to 3’ bias.  
-The command for computing the CollectRnaSeqMetrics is in [qc53\_ref.sh](bin/q53_ref.sh) and the essential part is
+The command for computing the CollectRnaSeqMetrics is in [qc53\_ref.sh](bin/qc53_ref.sh) and the essential part is
 ```bash
 picard CollectRnaSeqMetrics\
      I=$bam \
