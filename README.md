@@ -30,7 +30,7 @@ We are heavily relying on conda to install/update many bioinformatics software w
 ## A.2 Bash environments setup
 We rely on the same set-up of conda installation so that the dependency softwares/packages (with the same versions) are portable. We need to export the environmental variables `PATH`, `MOTRPAC_root`,`MOTRPAC_conda`,`MOTRPAC_refdata`
 * `MOTRPAC_root` is the root folder of the github code 
-* `MOTRPAC_conda` is conda installation folder `$conda` mentioned above
+* `MOTRPAC_conda` is conda installation folder `$conda` mentioned above 
 * `MOTRPAC_refdata` is the genome data index folder
 * `export $(bin/load_motrpac.sh)`will export the all of the above environment variables for Sinai people
 * `export $(bin/load_motrpac.sh -c $conda -r $refdata)` for non-sinai people. 
@@ -51,11 +51,11 @@ We rely on the same set-up of conda installation so that the dependency software
 * Make sure the gtf file and fa file from ensembl have "chr" as part of the chromosome name as in gencode data (see [fixchr4ensembl.sh](bin/fixchr4ensembl.sh))
 * Sort the gtf file accordingly, see [genome.sh](bin/genome.sh)
 * Build the genome reference data, the details on these commands will be described latter.
-  * [star\_index](bin/star\_index.sh)
-  * [bowtie2\_index](bin/bowite2\_index.sh)
-  * [rsem\_index](bin/rsem\_index.sh)
-  * [qc53\_ref](bin/qc53\_ref.sh)
-* For each genome folder that was downloaded by [source\_data.sh](bin/source\_data.sh). The genome data and index for the refdata can be built at the refdata with the command, for example hg38\_gencode\_v29
+  * [star\_index](bin/star_index.sh)
+  * [bowtie2\_index](bin/bowite2_index.sh)
+  * [rsem\_index](bin/rsem_index.sh)
+  * [qc53\_ref](bin/qc53_ref.sh)
+* For each genome folder that was downloaded by [source\_data.sh](bin/source_data.sh). The genome data and index for the refdata can be built at the refdata with the command, for example hg38\_gencode\_v29
   ```bash
   cd  $MOTRPAC_refdata/hg38_gencode_v29
   snakemake -s $MOTRPAC_root/genome_index.snakefile
