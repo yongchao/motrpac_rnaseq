@@ -105,19 +105,19 @@
     },
     "qc_all":
     {
-	"name"      : "{rule}",
+        "name"      : "{rule}",
         "output"    : "log/cluster/{rule}",
         "error"     : "log/cluster/{rule}"
     },
     "post_align_QC_all":
     {
-	"name"      : "{rule}",
+        "name"      : "{rule}",
         "output"    : "log/cluster/{rule}",
         "error"     : "log/cluster/{rule}"
     },
     "pre_align_QC_all":
     {
-	"name"      : "{rule}",
+        "name"      : "{rule}",
         "output"    : "log/cluster/{rule}",
         "error"     : "log/cluster/{rule}"
     },

@@ -111,7 +111,7 @@ We rely on the same set-up of conda installation so that the dependency software
 * `$fqfile`: one of the fastq files in `${SID}_R1.fastq.gz` and `${SID}_R2.fastq.gz` under folder `fastq_raw`
 
 ## C.3 Attach UMI from index file to read files
-In order to allow the the later data to track the UMI for each read, one stragety is to attach the UMI form the index fastq file `_I1` to `_R1` and `_R2`. The implementation is in [UMI_attach.awk](bin/UMI_attach.awk). We will apply this awk command for all of `_R1` and `_R2` files in the folder `fastq_raw` and save them into folder `fastq_attach`
+In order to allow the the later data to track the UMI for each read, one stragety is to attach the UMI from the index fastq file `_I1` to `_R1` and `_R2`. The implementation is in [UMI_attach.awk](bin/UMI_attach.awk). We will apply this awk command for all of `_R1` and `_R2` files in the folder `fastq_raw` and save them into folder `fastq_attach`
 
 ## C.3 Adapter trimming
 For each paired-end fastq files (`${SID}_R1.fastq.gz` and `${SID}_R2.fastq.gz`) under folder `fastq_attach`, remove adapters using cutadapt. Eliminate reads that are too short after removing adapters and save trimmed fastq files into folder `fastq_trim`. Save reads that were trimmed because they were too short into the folder `fastq_trim/too_short`. The details are in [trim.sh](bin/trim.sh). The following will be for the paired input fastq files. The implementation also considers single ended fastq file.
@@ -183,12 +183,12 @@ featureCounts -a $gdir/genome.gtf -o featureCounts/$SID -p -M --fraction star_al
 ```
 
 ## D.2A Prepare RSEM reference
-It needs to be done once [rsem\_index.sh](bin/rsem\_index.sh). 
+It needs to be done once [rsem\_index.sh](bin/rsem_index.sh). 
 ```bash
 rsem-prepare-reference --gtf genome.gtf genome.fa rsem_index/genome
 ```
 ## D.2B RSEM quantification 
-Run quantification with the sorted `star_algin/$SID/Aligned.toTranscriptome.sorted.bam` files. For paired fastq files, the implementation from [rsem.sh](bin/rsemh.sh) is like below
+Run quantification with the sorted `star_algin/$SID/Aligned.toTranscriptome.sorted.bam` files. For paired fastq files, the implementation from [rsem.sh](bin/rsem.sh) is like below
 ```bash
 rsem-calculate-expression \
     --paired-end \
@@ -216,10 +216,10 @@ bowtie2 -p $threads \
 	-S $sam >rRNA/{SID}.txt
 ```
 ### D.4A prepare refFlat file for Picard CollectRnaSeqMetrics
-* refFlat files are required for  Picard CollectRnaSeqMetrics. The refFlat file is generated from the GTF file of each genome folder under `MOTRPAC\_refdata`. The implementation details can be seen in [qc53\_ref.sh](bin/q53\_ref.sh)
+* refFlat files are required for  Picard CollectRnaSeqMetrics. The refFlat file is generated from the GTF file of each genome folder under `MOTRPAC_refdata`. The implementation details can be seen in [qc53\_ref.sh](bin/qc53_ref.sh)
 ### D.4B Collect RNA-seq metrics with Picard CollectRnaSeqMetrics
 Compute post alignment QC metrics, including % mapped to coding, intron, intergenic, UTR, and % correct strand, and 5’ to 3’ bias.  
-The command for computing the CollectRnaSeqMetrics is in [qc53\_ref.sh](bin/q53\_ref.sh) and the essential part is
+The command for computing the CollectRnaSeqMetrics is in [qc53\_ref.sh](bin/q53_ref.sh) and the essential part is
 ```bash
 picard CollectRnaSeqMetrics\
      I=$bam \

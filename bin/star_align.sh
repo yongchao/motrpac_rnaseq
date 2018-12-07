@@ -13,7 +13,7 @@ mkdir -p star_align/$SID
 ulimit -v 41000000000
 
 STAR  --genomeDir $gdir/star_index\
-      --sjdbOverhang  99\
+      --sjdbOverhang  100\
       --readFilesIn "$@"\
       --outFileNamePrefix star_align/${SID}/\
       --readFilesCommand zcat \
