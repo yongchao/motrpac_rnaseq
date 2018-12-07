@@ -52,7 +52,7 @@ We rely on the same set-up of conda installation so that the dependency software
 * Sort the gtf file accordingly, see [genome.sh](bin/genome.sh)
 * Build the genome reference data, the details on these commands will be described latter.
   * [star\_index](bin/star_index.sh)
-  * [bowtie2\_index](bin/bowite2_index.sh)
+  * [bowtie2\_index](bin/bowtie2_index.sh)
   * [rsem\_index](bin/rsem_index.sh)
   * [qc53\_ref](bin/qc53_ref.sh)
 * For each genome folder that was downloaded by [source\_data.sh](bin/source_data.sh). The genome data and index for the refdata can be built at the refdata with the command, for example hg38\_gencode\_v29
