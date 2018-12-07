@@ -126,11 +126,11 @@ cutadapt \
     -a $index_adapter \
     -A $univ_adapter \
     -o fastq_trim/$R1 \
-	-p fastq_trim/$R2\
+    -p fastq_trim/$R2 \
     -m 20 \
-    --too-short-output fastq_trim/tooshort/$R1\
-    --too-short-paired-output fastq_trim/tooshort/$R2\
-	fastq_raw/$R1 fastq_raw/$R2
+    --too-short-output fastq_trim/tooshort/$R1 \
+    --too-short-paired-output fastq_trim/tooshort/$R2 \
+    fastq_raw/$R1 fastq_raw/$R2
 ```
 ## C.4  Run fastqc on all of the fastq files in fastq\_trim folder
 * In the command [fastqc.sh](bin/fastqc.sh), specifying `$odir` to be `fastqc` and `$fqfile` to be one of the fastq files in `${SID}_R1.fastq.gz` and `${SID}_R2.fastq.gz` under the folder `fastq_trim`
@@ -241,11 +241,11 @@ We will use the UMI and the aligned information to find out the duplicates and r
 The implementaiton is in the rule `pre_align_QC` of the `rna-seq.snakefile` and [multiqc.sh](bin/multiqc.sh)
 ```bash
 multiqc \
-	-d \
-	-f \
-	-n pre_align \
-	-o multiqc \
-	fastqc fastqc fastqc_raw
+    -d \
+    -f \
+    -n post_align \
+    -o multiqc \
+	post_align star_align featureCounts rsem 
 ```
 # E Compile important metrics from the MultiQC output and other log files
 The R script [qc.R](bin/qc.R) collects all of the important the QC metrics from multiQC output and other log files. All of the metrics have been saved
