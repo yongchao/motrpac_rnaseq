@@ -20,17 +20,18 @@ set -e
 #The default was unitelligently set to 6
 cd star_align/UMI_$SID
 
-tmpdir=$(readlink -e $MOTRPAC_ROOT/tmpdir) #this may avoid the nudup.py named pipe problems
+tmpdir=../../tmpdir #this may avoid the nudup.py named pipe problems
+mkdir -p $tmpdir
 bam_uni=${SID}_uniq.bam
 
 bam_uniq.sh $bam $bam_uni $paired 
-python2 $MOTRPAC_ROOT/nugen/nudup.py $pairopt -s $len -l $len --rmdup-only -o $SID -T $tmpdir $bam_uni
+python2 $MOTRPAC_root/nugen/nudup.py $pairopt -s $len -l $len --rmdup-only -o $SID -T $tmpdir $bam_uni
 mv $SID.sorted.dedup.bam Aligned.sortedByCoord.out.bam
 
 #This file needs to be sorted first
 samtools sort -o trans_sorted.bam $trans_bam
 bam_uniq.sh trans_sorted.bam $bam_uni $paired
-python2 $MOTRPAC_ROOT/nugen/nudup.py $pairopt -s $len -l $len --rmdup-only -o ${SID}_trans -T $tmpdir $bam_uni
+python2 $MOTRPAC_root/nugen/nudup.py $pairopt -s $len -l $len --rmdup-only -o ${SID}_trans -T $tmpdir $bam_uni
 
 #clean up
 rm trans_sorted.bam $bam_uni

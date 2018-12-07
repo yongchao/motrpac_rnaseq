@@ -4,7 +4,9 @@ bam=$1 #star_align/{sample}_Aligned.sortedByCoord.out.bam
 gdir=$2
 SID=$(basename $(dirname $bam))
 strand=FIRST_READ_TRANSCRIPTION_STRAND #The MOP specify FIRST_READ_TRANSCRIPTION_STRAND
-picard CollectRnaSeqMetrics\
+#find where picard.jar is
+PICARD=$(dirname $(readlink -e $(which picard)))/picard.jar
+java -jar $PICARD CollectRnaSeqMetrics\
      I=$bam \
      O=qc53/${SID}.RNA_Metrics\
      MINIMUM_LENGTH=50 \

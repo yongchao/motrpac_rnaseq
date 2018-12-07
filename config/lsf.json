@@ -74,6 +74,12 @@
         "time"      : "12:00",
         "resources" : "\"rusage[mem=6000] span[ptile=6]\""
     },
+    "ERCC" :
+    {
+        "nCPUs"     : "6",
+        "time"      : "12:00",
+        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+    },
     "bowtie_align" :
     {
         "nCPUs"     : "6",
@@ -96,5 +102,23 @@
     {
         "resources" : "\"rusage[mem=20000]\"",
         "time"      : "12:00"
+    },
+    "qc_all":
+    {
+	"name"      : "{rule}",
+        "output"    : "log/cluster/{rule}",
+        "error"     : "log/cluster/{rule}"
+    },
+    "post_align_QC_all":
+    {
+	"name"      : "{rule}",
+        "output"    : "log/cluster/{rule}",
+        "error"     : "log/cluster/{rule}"
+    },
+    "pre_align_QC_all":
+    {
+	"name"      : "{rule}",
+        "output"    : "log/cluster/{rule}",
+        "error"     : "log/cluster/{rule}"
     },
 }

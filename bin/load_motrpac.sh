@@ -1,56 +1,66 @@
 #!/bin/bash 
 set -eu -o pipefail
 
-# Before running this, make sure refdata, conda and tmpdir
-# under $MOTRPAC_ROOT have already been soft-linked to the right folders
-
 # Running this WILL NOT change the enviromental variables
 
-# You need to run the comand below to export the the enviromental variables $MOTRPAC_ROOT and $PATH
+# You need to run the comand below to export the the environmental variables $MOTRPAC_root, $MOTRPAC_conda,$MOTRPAC_refdata,$PATH
 #export $(bin/load_motrpac.sh)
 
 root=$(dirname $(dirname $(readlink -m $0))) #find out the real motrpac root folder
-
-while getopts h o 
+conda=/sc/orga/projects/sealfs01a/conda #sinai default
+refdata=/sc/orga/projects/sealfs01a/motrpac_refdata #sinai default
+while getopts hc:r: o 
 do      
     case "$o" in
-	h) echo "Usage: $0 [-h] "
-	   echo '-h: print help'
+	c): conda="$OPTARG";;
+	r): refdata="OPTARG";;
+	h) echo "Usage: $0 [-h] [-c conda_dir] [-r refdata_dir] "
 	   echo '  : prints out the environment variables that needs to be exported and '
-	   echo '    the folder structure is correct'
+	   echo '    the folder structure is correct'     
+	   echo '-h: print help'
+	   echo '-c conda_dir: setting the folder for the conda (default for sinai setup)'
+	   echo '-f refdata_dir: setting the folder for the genome references (default for sinai setup)'
 	   exit 0;;
     esac
 done
 
-##Simple testing the $root to make sure it points to the right motrpac root folder
-#to makre sure refdata is not pointing a wrong folder -d $root/refdata/globin
-if [ -L $root/redata ]; then
-    echo "MOTRPAC_ROOT requires a softlink to refdata"
+if [[ ! -d $refdata  ]]; then
+    echo "The refdata folder is not a folder"
     exit 1
 fi
 
-if [[ ! -L $root/conda || ! -d $root/conda/python2/conda-meta || ! -d $root/conda/python3/conda-meta ]]; then
-    echo "MOTRPAC_ROOT requires a softlink to conda with the right folder structure"
+if [[ ( ! -d $root/misc_data || ! -d $root/nugen ) || ( ! -f $root/rna-seq.snakefile || ! -f $root/bin/unload_motrpac.sh ) ]]; then
+    echo "The motrpac root folder does not have the right folder structure"
     exit 1
 fi
 
-if [[ ! -L $root/tmpdir ]]; then
-    echo "MOTRPAC_ROOT requires softlinke tmpdir"
+if [[ ! -d $conda/python2/conda-meta || ! -d $conda/python3/conda-meta ]]; then
+    echo "The conda folder does not have the right folder structure"
     exit 1
-else
-    #find out the space storage
-    space=$(df --direct $root/tmpdir |tail -1|awk '{print $4}')
-    if (( space < 1000000000 )); then
-	echo "MOTRPAC_ROOT/tmpdir needs to be at least 100G space"
-	exit 1
-    fi
 fi
-
 #remove the duplicate paths (assuming no path contain space or other special characters)
 de_duplicate(){
     echo $1| awk 'BEGIN{RS=ORS=":"};!a[$1]++'|
 	awk '{sub(":$","",$0);print}'
 }
 
-echo export PATH=$(de_duplicate $root/bin:$root/conda/python3/bin:$root/conda/python2/bin:$PATH)
-echo export MOTRPAC_ROOT=$root
+#We need to unload the previous enviroment setup
+#This segment is almost the same as script unload_motrpac.sh
+remove_path(){
+    p=$2
+    echo $1 | awk -v p=$p 'BEGIN{RS=ORS=":"}; $0!=p'|
+	awk '{sub(":$","",$0);print}'
+}
+set +u 
+if [ "${MOTRPAC_root}x" != x ]; then
+    PATH=$(remove_path $PATH $MOTRPAC_root/bin)
+    PATH=$(remove_path $PATH $MOTRPAC_conda/python3/bin)
+    PATH=$(remove_path $PATH $MOTRPAC_conda/python2/bin)
+fi
+set -u
+##########
+
+echo export PATH=$(de_duplicate $root/bin:$conda/python3/bin:$conda/python2/bin:$PATH)
+echo export MOTRPAC_root=$root
+echo export MOTRPAC_conda=$conda
+echo export MOTRPAC_refdata=$refdata

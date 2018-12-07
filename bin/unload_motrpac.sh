@@ -10,15 +10,15 @@ remove_path(){
 	awk '{sub(":$","",$0);print}'
 }
 set +u 
-if [ "${MOTRPAC_ROOT}x" != x ]; then
-    PATH=$(remove_path $PATH $MOTRPAC_ROOT/bin)
-    PATH=$(remove_path $PATH $MOTRPAC_ROOT/conda/python3/bin)
-    PATH=$(remove_path $PATH $MOTRPAC_ROOT/conda/python2/bin)
+if [ "${MOTRPAC_root}x" != x ]; then
+    PATH=$(remove_path $PATH $MOTRPAC_root/bin)
+    PATH=$(remove_path $PATH $MOTRPAC_conda/python3/bin)
+    PATH=$(remove_path $PATH $MOTRPAC_conda/python2/bin)
 fi
 set -u
 
 echo export PATH=$PATH
-echo unset MOTRPAC_ROOT
-
-
+echo unset MOTRPAC_root
+echo unset MOTRPAC_conda
+echo unset MOTRPAC_refdata
 

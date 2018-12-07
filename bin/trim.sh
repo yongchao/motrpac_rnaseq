@@ -11,7 +11,7 @@ set -euo pipefail
 #Maybe we should go with trim_galore
 
 index_adapter=AGATCGGAAGAGC
- univ_adapter=AGATCGGAAGAGC
+univ_adapter=AGATCGGAAGAGC
 #Future plan is to make the adpaters can be supplied on the fly
 #$2, when present, must be the same as $1 with R1 replaced by R2, not enforced here for now
 R1=$(basename $1)

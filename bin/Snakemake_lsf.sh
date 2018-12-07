@@ -8,7 +8,7 @@ set -eux -o pipefail
 #-n nCPU
 #-R resource
 #-m mothra
-jsonfile=$MOTRPAC_ROOT/config/lsf.json
+jsonfile=$MOTRPAC_root/config/lsf.json
 optn="{cluster.nCPUs}"
 optW="{cluster.time}"
 optP="{cluster.account}"

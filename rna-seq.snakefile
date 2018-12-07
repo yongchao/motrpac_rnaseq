@@ -14,10 +14,13 @@
 #${sid}_I1.fastq.gz, required for NuGEN with UMI for UMI processsing
 
 #configure genome by using --config genome=hg38_gencode_v29 etc
+#Updating the link for hg or hg38 so that we don't have to specify the whole name
+
+root=os.environ['MOTRPAC_root']
 if "genome" in config:
-    gdir=os.environ['MOTRPAC_ROOT']+"/refdata/"+config["genome"]
+    gdir=os.environ['MOTRPAC_refdata']+"/"+config["genome"]
 else:
-    gdir=os.environ['MOTRPAC_ROOT']+"/refdata/"+"hg38_gencode_v29"
+    gdir=os.environ['MOTRPAC_refdata']+"/hg38_gencode_v29"
 
 #If softlins fastq_raw to fastq folder, then no trim is happening
     
@@ -94,17 +97,16 @@ ruleorder: trim > trim_single
 #ruleorder: UMI > featureCounts
 #ruleorder: UMI > qc53
 
-localrules: all,qc_all,star_align_all,featureCounts_all,rsem_all,samples_all,fastqc_all,pre_align_QC,post_align_QC
+localrules: all,star_align_all,featureCounts_all,rsem_all,samples_all,fastqc_all
 
 rule all:
     input:
         "log/OK.pre_align_QC",
         "log/OK.post_align_QC",
+        "log/OK.qc_all",
         "log/OK.star_align",
         "log/OK.featureCounts",
         "log/OK.rsem"
-
-
 
 rule samples_all:
     output:
@@ -202,6 +204,16 @@ rule star_align:
         star_align.sh {gdir} {threads} {input} >&{log}
         '''
 
+rule chr_info:
+    input:
+        "star_align/{sample}/Aligned.sortedByCoord.out.bam"
+    output:
+        "star_align/{sample}/chr_info.txt"
+    shell:
+        '''
+        bam_chrinfo.sh {input}
+
+        '''
 def UMI_input(wildcards):
     SID=wildcards.sample
     SID=SID[4:]
@@ -249,7 +261,6 @@ rule featureCounts:
         '''
         featureCounts.sh {input} {gdir} {threads} {params} >&{log}
         '''
-
 rule rRNA:
     input:
         fastq_info
@@ -278,7 +289,21 @@ rule phix:
         out_tmp=phix/{wildcards.sample}_tmp.txt
         bowtie2.sh $gref {threads} {input} >& $out_tmp
         mv $out_tmp {output}
-        '''    
+        '''
+rule ERCC:
+    input:
+        fastq_info
+    output:
+        "ERCC/{sample}.txt"
+    threads: 6
+    shell:
+        '''
+        gdir_root=$(dirname {gdir})
+        gref=$gdir_root/misc_data/ERCC92/ERCC92
+        out_tmp=ERCC/{wildcards.sample}_tmp.txt
+        bowtie2.sh $gref {threads} {input} >& $out_tmp
+        mv $out_tmp {output}
+        '''       
 rule globin:
     input:
         fastq_info
@@ -352,30 +377,51 @@ rule fastqc_all:
         '''
 rule post_align_QC:
     input:
-        expand("qc53/{sample}.RNA_Metrics",sample=samples_all)
+        expand("qc53/{sample}.RNA_Metrics",sample=samples_all),
+        "log/OK.rsem",
+        "log/OK.featureCounts",
     output:
         "log/OK.post_align_QC"
     shell:
         '''
-        Rscript --vanilla qc53.R
-        multiqc -d -f -n post_align -o multiqc star_align featureCounts rsem 
-        
+        Rscript --vanilla {root}/bin/qc53.R
+        mkdir -p multiqc
+        multiqc.sh post_align star_align featureCounts rsem 
+        echo OK >{output}
         '''
+        
 rule pre_align_QC:
     input:
-        expand("globin/{sample}.txt",sample=samples),
-        expand("rRNA/{sample}.txt",sample=samples),
-        expand("fastqc/{sample}.txt",sample=samples_qc),
         "log/OK.fastqc"
     output:
         "log/OK.pre_align_QC"
     log:
-        "log/qc_all.log"
+        "log/pre_align_QC.log"
     shell:
         '''
         mkdir -p multiqc
-        multiqc -d -f -n pre_align -o multiqc fastqc_raw fastq_trim fastqc
+        fastqc_raw=""
+        if [[ {fastq_ini} == "fastq_raw/" ]]; then
+           fastqc_raw="fastqc_raw fastq_trim"
+        fi
+        multiqc.sh pre_align fastqc $fastqc_raw
         echo OK >{output}
+        '''
+rule qc_all:
+    input:
+        expand("globin/{sample}.txt",sample=samples),
+        expand("ERCC/{sample}.txt",sample=samples),
+        expand("phix/{sample}.txt",sample=samples),
+        expand("rRNA/{sample}.txt",sample=samples),
+        expand("star_align/{sample}/chr_info.txt",sample=samples_all),
+        "log/OK.pre_align_QC",
+        "log/OK.post_align_QC"
+    output:
+        "log/OK.qc_all"
+    shell:
+        '''
+        Rscript --vanilla {root}/bin/qc.R
+        echo OK>{output}
         '''
         
 rule rsem_all:

@@ -9,7 +9,7 @@
 ##And Tab delimited file
 BEGIN{
     FS=OFS="\t"
-    tmpdir=ENVIRON["MOTRPAC_ROOT"]"/tmpdir"
+    tmpdir="tmpdir" #the currend work folder
     system("mkdir -p "tmpdir)
     outfile=gettmpfilename(tmpdir)
     out1file=gettmpfilename(tmpdir)

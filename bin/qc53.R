@@ -1,7 +1,10 @@
 #!/usr/bin/env Rscript
-#Note --vanilla is supported only for the actual data
-##work ont the qc53.plot and collect qc53.txt
-#the program should be run in the project folder, the parent folder of qc53
+##Note --vanilla is supported only for the actual path
+##Input: qc53/{$SID}.RNA_Metrics" and possibly qc53/UMI_{$SID}.RNA_Metrics
+##output: qc53.plot and qc53.txt
+                                        
+##the program should be run in the project folder, the parent folder of qc53
+
 options(stringsAsFactors=FALSE)
 .DEBUG=interactive()
 if(.DEBUG){

@@ -1,6 +1,6 @@
 #!/bin/bash -x
 set -eu -o pipefail
-bam=$1 #star_align/{sample}/Aligned.toTranscriptome.out.bam"
+bam=$1 #star_align/$SID/Aligned.toTranscriptome.out.bam"
 gdir=$2
 threads=$3
 paired=$4 #0 is single and 1 paired
