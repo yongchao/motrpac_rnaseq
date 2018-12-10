@@ -6,7 +6,6 @@
 
 Table of Contents
 =================
-* [snakemake implementation of MoTrPAC RNA-seq pipeline](#snakemake-implementation-of-motrpac-rna-seq-pipeline)
 * [A. External softwares installation and bash environmental setup](#a-external-softwares-installation-and-bash-environmental-setup)
    * [A.1 Conda installation](#a1-conda-installation)
    * [A.2 Bash environments setup](#a2-bash-environments-setup)
