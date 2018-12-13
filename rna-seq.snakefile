@@ -3,7 +3,7 @@
 #Nov 20, 2018: The intial version that is shared with Stanford
 #July 20,2018: The initial push to sealfonlab
 
-#The usage are in the file rna-seq_README.md
+#The usage are in the file README.md
 
 #Folder structures at root of working folder
 #fastq_raw: raw fastq files, with no adpaters removed, probably a softlink to the fastq files in the output folder of bcl2fastq

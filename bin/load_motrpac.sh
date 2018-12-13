@@ -1,6 +1,5 @@
 #!/bin/bash 
 set -eu -o pipefail
-
 # Running this WILL NOT change the enviromental variables
 
 # You need to run the comand below to export the the environmental variables $MOTRPAC_root, $MOTRPAC_conda,$MOTRPAC_refdata,$PATH
@@ -12,8 +11,8 @@ refdata=/sc/orga/projects/sealfs01a/motrpac_refdata #sinai default
 while getopts hc:r: o 
 do      
     case "$o" in
-	c): conda="$OPTARG";;
-	r): refdata="OPTARG";;
+	c) conda="$OPTARG";;
+	r) refdata="$OPTARG";;
 	h) echo "Usage: $0 [-h] [-c conda_dir] [-r refdata_dir] "
 	   echo '  : prints out the environment variables that needs to be exported and '
 	   echo '    the folder structure is correct'     
@@ -23,7 +22,6 @@ do
 	   exit 0;;
     esac
 done
-
 if [[ ! -d $refdata  ]]; then
     echo "The refdata folder is not a folder"
     exit 1
