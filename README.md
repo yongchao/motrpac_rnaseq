@@ -1,6 +1,8 @@
 # snakemake implementation of MoTrPAC RNA-seq pipeline
 **Contact:** Yongchao Ge (yongchao.ge@mssm.edu)
 
+Edits made by Nicole Gay for compatibility with RNA MOP 
+
 * The initial MoTrPAC RNA-seq MOP: https://docs.google.com/document/d/1oz8jZAY9Rq4uqenp-0RMkQBhMtjsMLKlxfjlmRExSQ0/edit?ts=5b04a52e#
 * This README file was also consulted with Nicole Renee Gay's implementation https://bitbucket.org/nicolerg/motrpac_rna_mop 
 
