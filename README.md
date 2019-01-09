@@ -206,7 +206,7 @@ Parameters:
 ```bash
 mkdir -p star_align/$SID
 STAR  --genomeDir $gdir/star_index\
-      --sjdbOverhang  99\
+      --sjdbOverhang  100\
       --readFilesIn fastq_trim/${SID}_R1.fastq.gz fastq_trim/${SID}_R2.fastq.gz\
       --outFileNamePrefix star_align/${SID}/\
       --readFilesCommand zcat \
