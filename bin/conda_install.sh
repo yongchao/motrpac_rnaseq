@@ -1,12 +1,17 @@
 #This script needs to be run at the terminal interactively
 #It will install python2 and python3 respectively at the folder $conda/python2 and $conda/python3 and other bioninfomratics softwares/packages
 #required by motrpac
+#The actual python2 and python3 exceutable files will be $conda/python2/bin/python2 $conda/python3/bin/python3
+
 
 #$conda will be eventually pointed by MOTRPAC_conda
-
+#This variable needs to be defined before you can run this script
+# export conda=/sc/orga/projects/sealfs01a/conda #this is an example for sinai
 cd $conda
 
-#During both installations, always answer no for the question "Do you wish the installer to prepend the Miniconda2 install location"
+#During both installations, always answer no for the question "Do you wish the installer to prepend the Miniconda2 install location ..." (or the
+#the question "Do you wish the installer to initialize Miniconda2 in your ..."
+
 #We want to load the conda system on the fly rather than in all bash
 
 #Installing at the folder $conda/python2

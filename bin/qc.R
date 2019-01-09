@@ -8,10 +8,14 @@ readqcinfo<-function(type, name)
     read.delim(paste0("multiqc/",type,"_data/multiqc_",name,".txt"),
                sep="\t",head=TRUE,row.names=1,check.names=FALSE,strip.white=TRUE)
 }
-checknames<-function(x)
+checknames<-function(x,title)
 {
-    sum(rownames(x)!=samples)!=0
+    if(sum(rownames(x)!=samples)==0) return(1)
+    #to fix the problem of multqc that the order of S1 is later than S10
+    if(sum(sort(rownames(x))!=sort(samples))==0) return(2)
+    stop(paste0(title," is wrong"))
 }
+    
 #read star qc info the multiqc misses chimeric%, go with manully collected data from Log.final.out 
 star<-t(read.delim("star_align/star_QC.txt",sep="\t",row.names=1,strip.white=TRUE,check.names=FALSE))
 star<-star[,c(6,7,9:17,25,27,29,30,31,34)]
@@ -21,7 +25,9 @@ colnames(star)<-c("reads","avg_input_read_length","uniquely_mapped","%uniquely_m
                   "%unmapped_other","%chimeric")
 star<-sub("%$","",star)
 rownames(star)<-sub(" \\|$","",sub("^star_align \\| ","",rownames(star)))
+
 samples<-sort(rownames(star))
+
 star<-star[samples,]
 NS<-length(samples)
 #read fastqc info
@@ -42,20 +48,21 @@ TRIM<-dir.exists("fastq_trim")
 if(TRIM){
     trim<-readqcinfo("pre_align","cutadapt")
     rownames(trim)<-sub("_R[12]$","",rownames(trim))
-    if(checknames(trim)){
-        stop("the trim info is wrong")
+    if(checknames(trim,"trim")==2){
+        trim<-trim[samples,]
     }
     fastqc_raw<-fastqc[grep("^fastqc_raw \\| ",rownames(fastqc)),]
     rownames(fastqc_raw)<-sub("^fastqc_raw \\| ","",rownames(fastqc_raw))
-    if(checknames(fastqc_raw)){
-        stop("the fastqc_raw info is wrong")
+    if(checknames(fastqc_raw,"fastq_raw")==2){
+        fastqc_raw<-fastqc_raw[samples,]
     }
     fastqc<-fastqc[grep("^fastqc \\| ",rownames(fastqc)),]
 }
 rownames(fastqc)<-sub("^fastqc \\| ","",rownames(fastqc))
-if(checknames(fastqc)){
-        stop("the fastqc info is wrong")
-    }
+if(checknames(fastqc,"fastqc")==2){
+    fastqc<-fastqc[samples,]
+}
+
 ##read qc53,note that the multiqc is not working well for collectRNAmetrics
 qc53<-t(read.delim("qc53.txt",sep="\t",head=TRUE,row.names=1,check.names=FALSE))
 qc53<-qc53[,-match(c("RIBOSOMAL_BASES","PCT_RIBOSOMAL_BASES","SAMPLE","LIBRARY","READ_GROUP"),
@@ -137,8 +144,8 @@ if(!UMI){
 chr_info<-round(chr_info,dig=2)
 #Now putting all togther
 qc<-NULL
-if(TRIM) qc<-cbind("reads_raw"=fastqc[,1],"%trimmed"=round(as.numeric(star[,1])/fastqc[,"Total Sequences"]*100,dig=2),
-                   "%trimmed_bases"=trim[,"percent_trimmed"])
+if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
+                   "%trimmed_bases"=round(trim[,"percent_trimmed"],dig=2))
 qc<-cbind(qc,reads=star[,1],"%GC"=round(fastqc[,"%GC"],dig=2),"%dup_sequence"=100-round(fastqc[,"total_deduplicated_percentage"],dig=2),
           misc[,1:5])
 if(UMI){

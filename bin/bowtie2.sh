@@ -1,6 +1,5 @@
 #!/bin/bash
 set -eu -o pipefail
-
 #if -b set, then computing the bam file in the current folder, otherwise just the qc metrics
 #if -d dir set, then all of the results including bam file is saved at the folder dir
 optb=0
