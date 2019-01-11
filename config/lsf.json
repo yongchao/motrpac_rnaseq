@@ -102,8 +102,8 @@
     "qc_all":
     {
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}",
-        "error"     : "log/cluster/{rule}"
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
     },
     "post_align_QC":
     {

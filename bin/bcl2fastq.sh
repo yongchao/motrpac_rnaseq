@@ -9,6 +9,10 @@ set -euo pipefail
 mkdir bcl2fastq
 cd bcl2fastq
 
+# $bcl_rawdata is defined to a folder that contains the raw data of the bcl run folder
+# It can be defined here by
+# export bcl_raw=/path/to/bcl_raw_data
+
 bcl2fastq --sample-sheet SampleSheet.csv \
 	  --use-bases-mask Y*,I8Y*,I*,Y* \
 	  -R  $bcl_rawdata \
@@ -19,10 +23,10 @@ bcl2fastq --sample-sheet SampleSheet.csv \
 find . -name "*_R2_001.fastq.gz" |awk '{print "mv "$0" "gensub("_R2_001.fastq.gz$","_I1_001.fastq.gz",1)}' |bash -x
 find . -name "*_R3_001.fastq.gz" |awk '{print "mv "$0" "gensub("_R3_001.fastq.gz$","_R2_001.fastq.gz",1)}' |bash -x
 
-#If we only have single lane, we can build soft links as below, otherwise we need to merge the fastq files from different lanes.
+#If we only have a single lane, we can build soft links as below, otherwise we need to merge the fastq files from different lanes.
 
 #In Illumina, the fastq file has the format:
-#SID_S[0-9]+_L00[1-8]_R1_001.fastq.gz, we assume SID is unique for different samples, which can be done by changing file SampleSheet.csv
+#SID_S[0-9]+_L00[1-8]_[IR][12]_001.fastq.gz, we assume SID is unique for different samples, which can be done by changing file SampleSheet.csv
 cd ..
 mkdir fastq_raw
 cd fastq_raw
