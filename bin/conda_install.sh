@@ -3,10 +3,9 @@
 #required by motrpac
 #The actual python2 and python3 exceutable files will be $conda/python2/bin/python2 $conda/python3/bin/python3
 
-
 #$conda will be eventually pointed by MOTRPAC_conda
-#This variable needs to be defined before you can run this script
-# export conda=/sc/orga/projects/sealfs01a/conda #this is an example for sinai
+#  The variable conda needs to be defined here, for example
+#  export conda=/sc/orga/projects/sealfs01a/conda #this is an example for sinai
 cd $conda
 
 #During both installations, always answer no for the question "Do you wish the installer to prepend the Miniconda2 install location ..." (or the
@@ -50,4 +49,5 @@ conda install \
       bowtie2=2.3.4.3\
       fastqc=0.11.8 \
       bismark=0.20.0\
-      subread=1.6.3
+      subread=1.6.3\
+      ucsc-gtftogenepred=366
