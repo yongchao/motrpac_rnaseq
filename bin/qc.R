@@ -45,6 +45,7 @@ rownames(fastqc)<-sub("_R1$","",rownames(fastqc))
 
 #read the trim info and also clean-up fastqc when necessary
 TRIM<-dir.exists("fastq_trim")
+UMI<-dir.exists("fastq_attach")
 if(TRIM){
     trim<-readqcinfo("pre_align","cutadapt")
     rownames(trim)<-sub("_R[12]$","",rownames(trim))
@@ -70,14 +71,7 @@ qc53<-qc53[,-match(c("RIBOSOMAL_BASES","PCT_RIBOSOMAL_BASES","SAMPLE","LIBRARY",
 Nqc53<-ncol(qc53)
 nqc53<-nrow(qc53)
 if(nqc53==NS){
-    UMI=FALSE
     qc53<-qc53[samples,,drop=FALSE]
-}else if(nqc53==2*NS){
-    UMI=TRUE
-    qc53u<-qc53[paste0("UMI_",samples),,drop=FALSE]
-    colnames(qc53u)<-paste0(colnames(qc53),"_umi")
-    rownames(qc53u)<-sub("^UMI_","",rownames(qc53u))
-    qc53<-cbind(qc53[samples,,drop=FALSE],qc53u)
 }else{
     stop("star_qc and qc53 do not match")
 }
@@ -85,33 +79,27 @@ if(nqc53==NS){
 id<-c("CODING","UTR","INTRONIC","INTERGENIC","MRNA")
 loc<-match(c(paste0("PCT_",id,"_BASES"),"MEDIAN_5PRIME_TO_3PRIME_BIAS"),
            colnames(qc53)[1:Nqc53])
-if (UMI){
-    loc<-c(loc,loc+Nqc53)
-}
 qc53<-qc53[,loc,drop=FALSE]
 id2<-tolower(id)
 colnames(qc53)[1:6]<-c(paste0("%",id2),"median_5'_3'_bias")
-if(UMI){
-    colnames(qc53)[1:6+6]<-
-        c(paste0("%","umi_",id2),"umi_median_5'_3'_bias")
-}
+
 id<-grep("^%",colnames(qc53))
 qc53[,id]<-round(qc53[,id]*100,dig=2)
 
-##collect data for rRNA, globin and phix and ERCC and duplicates when present
-misc<-matrix(NA,NS,6)
-colnames(misc)<-c("globin","rRNA","phix","ERCC","picard_dup","UMI_dup")
+##collect data for rRNA, globin and phix and duplicates when present
+misc<-matrix(NA,NS,5)
+colnames(misc)<-c("globin","rRNA","phix","picard_dup","UMI_dup")
 for(i in 1:NS){
     SID<-samples[i]
-    for(j in 1:4){ #change to 4 when good
+    for(j in 1:3){ #change to 4 when good
         zz<-pipe(paste0("tail -1 ",colnames(misc)[j],"/",SID,".txt |tr -d %"))
         misc[i,j]<-scan(zz,n=1,quiet=TRUE)
         close(zz)
     }
-    misc[i,5]<-read.delim(paste0("mark_dup/",SID,".dup_metrics"),skip=6,head=TRUE,row=1)[1,"PERCENT_DUPLICATION"]*100
+    misc[i,4]<-read.delim(paste0("mark_dup/",SID,".dup_metrics"),skip=6,head=TRUE,row=1)[1,"PERCENT_DUPLICATION"]*100
     if(UMI){
-        zz<-pipe(paste0("tail -1 star_align/UMI_",SID,"/",SID,"_dup_log.txt |cut -f 6"))
-        misc[i,6]<-scan(zz,n=1,quiet=TRUE)*100
+        zz<-pipe(paste0("tail -1 star_align/",SID,"/",SID,"_dup_log.txt |cut -f 6"))
+        misc[i,5]<-scan(zz,n=1,quiet=TRUE)*100
         close(zz)
     }
 }
@@ -119,9 +107,9 @@ misc<-round(misc,dig=2)
 colnames(misc)<-paste0("%",colnames(misc))
 
 ##Read the chr_info.txt
-chr_info<-matrix(NA,NS,10)
-colnames(chr_info)<-c("chrX","chrY","chrM","chrAuto","contig",
-                      "umi_chrX","umi_chrY","umi_chrM","umi_chrAuto","umi_contig")
+chr_info<-matrix(NA,NS,5)
+colnames(chr_info)<-c("chrX","chrY","chrM","chrAuto","contig")
+
 readchr<-function(sid){
     x<-read.delim(paste0("star_align/",sid,"/chr_info.txt"),
                   sep="\t",row.names=1,header=FALSE)
@@ -133,23 +121,17 @@ readchr<-function(sid){
     
 for(i in 1:NS){
     chr_info[i,1:5]<-readchr(samples[i])
-    if(UMI){
-        chr_info[i,6:10]<-readchr(paste0("UMI_",samples[i]))
-    }
 }
 colnames(chr_info)<-paste0("%",colnames(chr_info))
-if(!UMI){
-    chr_info<-chr_info[,1:5] #the other columnes are not needed
-}
 chr_info<-round(chr_info,dig=2)
 #Now putting all togther
 qc<-NULL
 if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
                    "%trimmed_bases"=round(trim[,"percent_trimmed"],dig=2))
 qc<-cbind(qc,reads=star[,1],"%GC"=round(fastqc[,"%GC"],dig=2),"%dup_sequence"=100-round(fastqc[,"total_deduplicated_percentage"],dig=2),
-          misc[,1:5])
+          misc[,1:4])
 if(UMI){
-    qc<-cbind(qc,"%umi_dup"=misc[,6])
+    qc<-cbind(qc,"%umi_dup"=misc[,5])
 }
 qc<-cbind(qc,star[,-1],chr_info,qc53)
 

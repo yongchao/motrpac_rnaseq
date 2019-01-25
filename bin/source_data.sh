@@ -15,12 +15,12 @@ cd hg38_gencode_v29/source
 wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.primary_assembly.annotation.gtf.gz
 wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/GRCh38.primary_assembly.genome.fa.gz
 
-#The following is for the rn6 ensembl release version 94
+#The following is for the rn6 ensembl release version 95
 cd $MOTRPAC_refdata
-mkdir -p rn6_ensembl_r94/source
-cd rn6_ensembl_r94/source
-wget ftp://ftp.ensembl.org/pub/release-94/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.94.gtf.gz
-wget ftp://ftp.ensembl.org/pub/release-94/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz
+mkdir -p rn6_ensembl_r95/source
+cd rn6_ensembl_r95/source
+wget ftp://ftp.ensembl.org/pub/release-95/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz
+wget ftp://ftp.ensembl.org/pub/release-95/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.95.gtf.gz
 
 #The following is for the mm10 gencode version v19, not used for MotrPAC, but for other purpose
 cd $MOTRPAC_refdata
@@ -43,5 +43,3 @@ do
     bismark_genome_preparation . >& ../log/${faid}_bismark_index.log
     cd ..
 done
-
-

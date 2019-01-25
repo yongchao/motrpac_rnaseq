@@ -16,7 +16,7 @@ if(.DEBUG){
 if(length(Args)>=1){
     file.samples<-Args[1]
 }else{
-    file.samples<-"samples_all"
+    file.samples<-"samples" #samples_all
 }
 
 if(length(Args)>=2){

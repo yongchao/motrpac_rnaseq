@@ -1,7 +1,7 @@
 #!/bin/awk -f
 ##row_paste.awk infoid=1 colid=0 <samples.txt
 ##skip=1, the number of lines to skip
-##samples.txt is table delimited file with two columns, one is the the file name and the other is the sample_ID
+##samples.txt is tab delimited file with two columns, one is the the file name and the other is the sample_ID
 #if it has only one column, then the file name is also the sample.id
 ##collect all of the data from many samples
 ##Assuming one line for the file header
@@ -17,13 +17,6 @@ BEGIN{
     info1file=gettmpfilename(tmpdir)
     tmpfile=gettmpfilename(tmpdir)
     headerfile=gettmpfilename(tmpdir)
-    
-    #print "outfile="outfile"\n" >"/dev/stderr"
-    #print "out1file="out1file"\n" >"/dev/stderr"
-    #print "infofile="infofile"\n" >"/dev/stderr"
-    #print "info1file="info1file"\n" >"/dev/stderr"
-    #print "tmpfile="tmpfile"\n" >"/dev/stderr"
-    #print "headerfile="headerfile"\n" >"/dev/stderr"
 }
 NR==1{
     tailm="tail -n +"skip+2" "#just the main content

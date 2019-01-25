@@ -10,7 +10,7 @@ SID=$(basename $1 _R1.fastq.gz)
 mkdir -p star_align/$SID
 
 #why is this required
-ulimit -v 41000000000
+#ulimit -v 41000000000
 
 STAR  --genomeDir $gdir/star_index\
       --sjdbOverhang  100\
@@ -22,12 +22,4 @@ STAR  --genomeDir $gdir/star_index\
       --runThreadN $threads\
       --outSAMtype BAM SortedByCoordinate\
       --quantMode TranscriptomeSAM
-      #--genomeFastaFiles $gdir/genome.fa\
-      #--sjdbGTFfile $gdir/genome.gtf\
-      #--twopassMode Basic
-      #The above three options not working for the memory
 
-      #--twopassMode Basic
-      #--limitBAMsortRAM 15000000000
-      #--genomeLoad NoSharedMemory\ doesn't seem to work, but it's the default anyway
-      #--genomeLoad LoadAndKeep \ the MOP is wrong here

@@ -1,9 +1,11 @@
 #!/bin/bash 
 set -eu -o pipefail
-# Running this WILL NOT change the enviromental variables
+# Running this script WILL NOT change the enviromental variables
 
 # You need to run the comand below to export the the environmental variables $MOTRPAC_root, $MOTRPAC_conda,$MOTRPAC_refdata,$PATH
-#export $(bin/load_motrpac.sh)
+# first try the command bin/load_motrpac.sh [-c conda_dir] [-r refdata_dir] to identify problems, 
+# and then running the command below to export the variables, or you can just copy and paste the output from the above command to the terminal
+# export $(bin/load_motrpac.sh [-c conda_dir] [-r refdata_dir])
 
 root=$(dirname $(dirname $(readlink -m $0))) #find out the real motrpac root folder
 conda=/sc/orga/projects/sealfs01a/conda #sinai default

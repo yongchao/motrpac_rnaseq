@@ -1,5 +1,6 @@
 #Author: Yongchao Ge
 
+#Jan 22, 2018: the version is in sync with the MOP
 #Nov 20, 2018: The intial version that is shared with Stanford
 #July 20,2018: The initial push to sealfonlab
 
@@ -14,7 +15,7 @@
 #${sid}_I1.fastq.gz, required for NuGEN with UMI for UMI processsing
 
 #configure genome by using --config genome=hg38_gencode_v29 etc
-#Updating the link for hg or hg38 so that we don't have to specify the whole name
+#Updating the link for rn6 and hg38 in $MOTRPAC_refdata so that we don't have to specify the whole name
 
 root=os.environ['MOTRPAC_root']
 if "genome" in config:
@@ -22,7 +23,7 @@ if "genome" in config:
 else:
     gdir=os.environ['MOTRPAC_refdata']+"/hg38_gencode_v29"
 
-#If softlins fastq_raw to fastq folder, then no trim is happening
+#If softlinks fastq_raw to fastq folder, then no trim is happening
     
 #do not allow to go to the sub directory
 wildcard_constraints:
@@ -60,7 +61,6 @@ for s in samples:
     if os.path.isfile(fastq_ini+s+"_I1.fastq.gz"):
         I+=1
 
-samples_all=[s for s in samples] #this is for summarization, it may include UMI
 if I>0:
     if I!=len(samples):
         print("Not all samples have UMI index files, exit\n")
@@ -68,11 +68,6 @@ if I>0:
         sys.exit(1)
     else:
         trim_input="fastq_attach/"
-        for s in samples:
-            samples_all.extend(["UMI_"+s])
-            R2["UMI_"+s]=R2[s] #not necessary, just to avoid keyerror
-            R["UMI_"+s]=R[s]
-        
 else:
     trim_input="fastq_raw/"
 
@@ -97,7 +92,7 @@ ruleorder: trim > trim_single
 #ruleorder: UMI > featureCounts
 #ruleorder: UMI > qc53
 
-localrules: all,star_align_all,featureCounts_all,rsem_all,samples_all,fastqc_all
+localrules: all,star_align_all,featureCounts_all,rsem_all,samples,fastqc_all
 
 rule all:
     input:
@@ -108,16 +103,12 @@ rule all:
         "log/OK.featureCounts",
         "log/OK.rsem"
 
-rule samples_all:
+rule samples:
     output:
-        "samples_all",
         "samples"
     run:
+        #even with one output, we still need to treat it as an array
         with open(output[0], "w") as out:
-            for s in samples_all:
-                out.write(s+"\n")
-        out.close()        
-        with open(output[1], "w") as out:
             for s in samples:
                 out.write(s+"\n")
         out.close()
@@ -214,23 +205,15 @@ rule chr_info:
         bam_chrinfo.sh {input}
 
         '''
-def UMI_input(wildcards):
-    SID=wildcards.sample
-    SID=SID[4:]
-    return(expand("star_align/"+SID+"/Aligned.{type}.out.bam",type=["sortedByCoord","toTranscriptome"]))
-    
-rule UMI:
-    input:UMI_input #The naivway is not going to work by appending UMI
-    output:"star_align/{sample}/Aligned.sortedByCoord.out.bam",
-           rsem_bam=temp("star_align/{sample}/Aligned.toTranscriptome.out.bam")
-    log:"star_align/{sample}/dedup.log"
-    wildcard_constraints:
-        sample="UMI_[^/]+"
+rule UMI_dup:
+    input:"star_align/{sample}/Aligned.sortedByCoord.out.bam"
+    output:"star_align/{sample}/{sample}_dup_log.txt"
+    log:"star_align/{sample}/UMI_dup.log"
     params:
         R2_info
     shell:
         '''
-        UMI.sh {input} {params} >&{log}
+        UMI_dup.sh {input} {params}
         '''
 rule rsem:
     input:
@@ -290,20 +273,6 @@ rule phix:
         bowtie2.sh $gref {threads} {input} >& $out_tmp
         mv $out_tmp {output}
         '''
-rule ERCC:
-    input:
-        fastq_info
-    output:
-        "ERCC/{sample}.txt"
-    threads: 6
-    shell:
-        '''
-        gdir_root=$(dirname {gdir})
-        gref=$gdir_root/misc_data/ERCC92/ERCC92
-        out_tmp=ERCC/{wildcards.sample}_tmp.txt
-        bowtie2.sh $gref {threads} {input} >& $out_tmp
-        mv $out_tmp {output}
-        '''       
 rule globin:
     input:
         fastq_info
@@ -343,15 +312,15 @@ rule mark_dup:
         '''
 rule featureCounts_all:
     input:
-        expand("featureCounts/{sample}",sample=samples_all),
-        "samples_all"
+        expand("featureCounts/{sample}",sample=samples),
+        "samples"
     output:
         "log/OK.featureCounts"
     log:
         "log/featureCounts.log"
     shell:
         '''
-        cat samples_all| awk '{{print "featureCounts/"$0"\t"$0}}' |
+        cat samples | awk '{{print "featureCounts/"$0"\t"$0}}' |
         row_paste.awk infoid=1 colid=0 skip=1 >featureCounts.txt 2>{log}
         echo "Finished featureCounts" >{output}
         '''
@@ -387,7 +356,7 @@ rule fastqc_all:
         '''
 rule post_align_QC:
     input:
-        expand("qc53/{sample}.RNA_Metrics",sample=samples_all),
+        expand("qc53/{sample}.RNA_Metrics",sample=samples),
         "log/OK.rsem",
         "log/OK.featureCounts",
     output:
@@ -420,11 +389,11 @@ rule pre_align_QC:
 rule qc_all:
     input:
         expand("globin/{sample}.txt",sample=samples),
-        expand("ERCC/{sample}.txt",sample=samples),
         expand("phix/{sample}.txt",sample=samples),
         expand("rRNA/{sample}.txt",sample=samples),
-        expand("star_align/{sample}/chr_info.txt",sample=samples_all),
+        expand("star_align/{sample}/chr_info.txt",sample=samples),
         expand("mark_dup/{sample}.dup_metrics",sample=samples),
+        expand("star_align/{sample}/{sample}_dup_log.txt",sample=samples),
         "log/OK.pre_align_QC",
         "log/OK.post_align_QC"
     output:
@@ -437,15 +406,15 @@ rule qc_all:
         
 rule rsem_all:
     input:
-        expand("rsem/log/OK.{sample}",sample=samples_all),
-        "samples_all"
+        expand("rsem/log/OK.{sample}",sample=samples),
+        "samples"
     output:
         "log/OK.rsem"
     log:
         "log/rsem.log"
     shell:
         '''
-        cat samples_all | awk '{{print "rsem/"$0".genes.results\t"$0}}'  > .samples.rsem
+        cat samples | awk '{{print "rsem/"$0".genes.results\t"$0}}'  > .samples.rsem
         row_paste.awk colid=6 < .samples.rsem >rsem_genes_tpm.txt 2>{log}
         row_paste.awk colid=7 < .samples.rsem >rsem_genes_fpkm.txt 2>>{log}
         row_paste.awk colid=5 < .samples.rsem >rsem_genes_count.txt 2>>{log}

@@ -108,13 +108,13 @@
     "post_align_QC":
     {
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}",
-        "error"     : "log/cluster/{rule}"
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
     },
     "pre_align_QC":
     {
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}",
-        "error"     : "log/cluster/{rule}"
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
     },
 }
