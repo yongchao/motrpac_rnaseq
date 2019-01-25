@@ -4,7 +4,7 @@
 * The MoTrPAC RNA-seq MOP: https://docs.google.com/document/d/1oz8jZAY9Rq4uqenp-0RMkQBhMtjsMLKlxfjlmRExSQ0/edit?ts=5b04a52e#
 * The other file [README.md](README.md) describes on how to run the pipeline
 * This document describes the implementation details for the MOP. No commands in this document should run separately.
-* The first sections starts with section C while sections A and B are in the other file  [README.md](README.md)
+* The first section in this file starts with section C while sections A and B are in the other file  [README.md](README.md)
 
 # C. Pre-alignment sample processing and QC
 

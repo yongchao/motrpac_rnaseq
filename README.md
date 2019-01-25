@@ -8,7 +8,7 @@
 
 ## A.1 Conda installation 
 We are heavily relying on conda to install/update many bioinformatics software with the same fixed versions. Most updated softwares are available at conda https://conda.io/miniconda.html . 
-* Following the instructions at [conda\_install.sh](bin/conda_install.sh) to install the python2 and python3 under the conda root folder `$conda` (a user defined path to install conda). The actual python2 and python3 exceutable files will be `$conda/python2/bin/python2` and  `$conda/python3/bin/python3`.
+* Following the instructions at [conda\_install.sh](bin/conda_install.sh) to install the python2 and python3 under the conda root folder `$conda` (a user defined path to install conda). The actual python2 and python3 executable files will be `$conda/python2/bin/python2` and  `$conda/python3/bin/python3`.
 * The last command at the file `conda_install.sh` installs the specified versions of software packages and their dependency packages.
   ```bash
   conda install \
@@ -38,7 +38,7 @@ We rely on the same set-up of conda installation so that the dependency software
 * If the above `export` may not work, try to run the command directly `bin/load_motrpac.sh` to identify errors, and then run the corresponding export commands. 
 
 ## A.3 Download the genome source and build the refdata
-* Following the commands in [source\_data.sh](bin/source_data.sh) to download the genome source data (fa and gtf from gencode and ensembl) and also build the bowtie2\_index for the miscellaneous small data (globin and rRNA)
+* Follow the commands in [source\_data.sh](bin/source_data.sh) to download the genome source data (fa and gtf from gencode and ensembl) and also build the bowtie2\_index for the miscellaneous small data (globin and rRNA)
 * Running the snakefile [genome\_index.snakefile](genome\_index.snakefile) to build the genome index for each genome folder that was downloaded by [source\_data.sh](bin/source_data.sh). The following is an example hg38\_gencode\_v29
   ```bash
   cd  $MOTRPAC_refdata/hg38_gencode_v29
@@ -59,8 +59,8 @@ We rely on the same set-up of conda installation so that the dependency software
 	ftp://ftp.ensembl.org/pub/release-95/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.95.gtf.gz
     ```
   * The gtf and fa files from ensembl have been modified to have "chr" as part of the chromosome name as in gencode data, see [fixchr4ensembl.sh](bin/fixchr4ensembl.sh) for details
-  * The gtf file is sorted, details can be seen [genome.sh](bin/genome.sh)
-  * Different types genome reference indexwas built with the following command and the details on these commands will be described in [MOP_details.md](MOP_details.md)
+  * The gtf file is sorted, details can be seen in [genome.sh](bin/genome.sh)
+  * Different types genome reference index was built with the following command and the details on these commands will be described in [MOP_details.md](MOP_details.md)
 	* [star\_index](bin/star_index.sh)
 	* [bowtie2\_index](bin/bowtie2_index.sh)
 	* [rsem\_index](bin/rsem_index.sh)
@@ -93,7 +93,7 @@ Details on setting-up the sequencing parameters for NuGEN are described in Secti
   `Snakemake.lsf -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95`
 
 # *Code implementation philosophy 
-* The default uses `python3`, while a few tools relies on `python2`. Both python3 and python2 co-exists peacefully by calling `python2` for python2 specific tools.
+* The default uses `python3`, while a few tools relies on `python2`. Both python3 and python2 co-exists peacefully by calling `python2` for python2 specific scripts.
 * Each individual component was implemented as an independent bash script file
 * The bash script follows the [strict bash mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/) with the setting of `set -euo pipefail`
 * The pipeline works for single ends file (with only `_R1` file) or paired-ends file (with `_R1` and `_R2` files) or with UMI (with `_I1` file)
