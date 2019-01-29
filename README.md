@@ -1,7 +1,7 @@
 # snakemake implementation of MoTrPAC RNA-seq pipeline
 **Contact:** Yongchao Ge (yongchao.ge@mssm.edu)
 
-* The MoTrPAC RNA-seq MOP: https://docs.google.com/document/d/1oz8jZAY9Rq4uqenp-0RMkQBhMtjsMLKlxfjlmRExSQ0/edit?ts=5b04a52e#
+* The MoTrPAC RNA-seq MOP: https://docs.google.com/document/d/1oz8jZAY9Rq4uqenp-0RMkQBhMtjsMLKlxfjlmRExSQ0/edit?ts=5b04a52e#heading=h.7hxqo4x00so
 * This README file and the MOP\_details files were also consulted with Nicole Renee Gay's implementation https://bitbucket.org/nicolerg/motrpac_rna_mop 
 
 # A. External softwares installation and bash environmental setup

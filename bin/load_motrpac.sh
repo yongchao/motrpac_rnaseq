@@ -30,7 +30,7 @@ if [[ ! -d $refdata  ]]; then
     exit 1
 fi
 
-if [[ ( ! -d $root/misc_data || ! -d $root/nugen ) || ( ! -f $root/rna-seq.snakefile || ! -f $root/bin/unload_motrpac.sh ) ]]; then
+if [[ ( ! -d $root/config || ! -d $root/nugen ) || (! -f $root/bin/unload_motrpac.sh || ! -f $root/sample_sub.snakefile) ]]; then
     echo "The motrpac root folder does not have the right folder structure"
     exit 1
 fi
