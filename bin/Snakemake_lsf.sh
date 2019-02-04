@@ -15,7 +15,8 @@ optP="{cluster.account}"
 optq="{cluster.queue}"
 optR="{cluster.resources}"
 cmdm=""
-while getopts j:W:P:q:n:R:m:h o 
+cmdx=""
+while getopts j:W:P:q:n:R:m:hx o 
 do      
     case "$o" in
         j) jsonfile="$OPTARG";;
@@ -25,6 +26,7 @@ do
 	n) optn="$OPTARG";;
 	R) optR="$OPTARG";;
 	m) cmdm="-m $OPTARG";;
+	x) cmdx="-sla Sealfon";;
         h) echo "Usage: $0 [-h] [-j json] [-W wall_time] [-P account] [-q queue [-p proj] [-- -s snakefile and other snakemake options]"
            echo '-h: print help'
 	   echo "-j: the json file (default $MOTRPAC_ROOT/config/lsf.json)"
@@ -44,4 +46,5 @@ mkdir -p log/cluster
 
 set -x
 
-snakemake -j 999 --cluster-config $jsonfile --cluster "bsub $cmdm -W $optW -P $optP -q $optq -n $optn -R $optR -oo {cluster.output} -eo {cluster.error} -J {cluster.name}" "$@"
+snakemake -j 999 --cluster-config $jsonfile --cluster "bsub $cmdm -W $optW -P $optP $cmdx -q $optq -n $optn -R $optR -oo {cluster.output} -eo {cluster.error} -J {cluster.name}" "$@"
+

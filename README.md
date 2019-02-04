@@ -1,7 +1,7 @@
 # snakemake implementation of MoTrPAC RNA-seq pipeline
 **Contact:** Yongchao Ge (yongchao.ge@mssm.edu)
 
-* [MoTrPAC RNA-seq MOP 2.0](https://docs.google.com/document/d/e/2PACX-1vRFurZraZfxfMd5BWfIQEnETlalDNjQPyMjS7TCTgc3MMlMtB_-tmJfEK7lmRV7GD30I7R9-ISX3kuM/pub)
+* [MoTrPAC RNA-seq MOP (web view version 2.0)](https://docs.google.com/document/d/e/2PACX-1vRFurZraZfxfMd5BWfIQEnETlalDNjQPyMjS7TCTgc3MMlMtB_-tmJfEK7lmRV7GD30I7R9-ISX3kuM/pub)
 * This README file and the MOP\_details files were also consulted with Nicole Renee Gay's implementation https://bitbucket.org/nicolerg/motrpac_rna_mop 
 
 # A. External softwares installation and bash environmental setup
@@ -28,7 +28,7 @@ We are heavily relying on conda to install/update many bioinformatics software w
 	  ucsc-gtftogenepred=366
   ```
 
-## A.2 Bash environments setup
+## A.2 Bash environment setup
 We rely on the same set-up of conda installation so that the dependency softwares/packages (with the same versions) are portable. We need to export the environmental variables `PATH`, `MOTRPAC_root`,`MOTRPAC_conda`,`MOTRPAC_refdata`
 * `MOTRPAC_root` is the root folder of the github code 
 * `MOTRPAC_conda` is conda installation folder `$conda` mentioned above 
@@ -98,10 +98,10 @@ Details on setting-up the sequencing parameters for NuGEN are described in Secti
 * The bash script follows the [strict bash mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/) with the setting of `set -euo pipefail`
 * The pipeline works for single ends file (with only `_R1` file) or paired-ends file (with `_R1` and `_R2` files) or with UMI (with `_I1` file)
 * The default option is for the paired-end files with UMI of MOTRPAC RNA-seq with NuGEN UDI
-* The file [MOP_details.md](MOP_details.md) describes UMI paired ends setting (the same as what the MOP described), but the actual bash script handles more complicated situations for different species and different types of data as mentioned right above.
+* The file [MOP\_details.md](MOP_details.md) describes UMI paired ends setting (the same as what the MOP described), but the actual bash script handles more complicated situations for different species and different types of data as mentioned right above.
 * With the appropriate setting of the parameters, this pipeline can also work with other RNA-seq data
 * Some codes are also part of other MOTRPAC projects (for example, RRBS-seq data) for building the genome references.
 
 # *The implementation details
-* The implementation details on the RNA-seq MOP can be seen in [MOP_details.md](MOP_details.md). 
-* The commands in [MOP_details.md](MOP_details.md) don't need to be run separately as everything has already been taken care of by the snakemake commands in the above Section B.2 
+* The implementation details on the RNA-seq MOP can be seen in [MOP\_details.md](MOP_details.md). 
+* The commands in [MOP\_details.md](MOP_details.md) don't need to be run separately as everything has already been taken care of by the snakemake commands in the above Section B.2 

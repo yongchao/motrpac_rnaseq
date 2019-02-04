@@ -14,7 +14,7 @@
     "star_index" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\"",
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\"",
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out",
         "error"     : "log/cluster/{rule}.err"
@@ -22,7 +22,6 @@
     
     "rsem_index" :
     {
-        "nCPUs"     : "1",
         "resources" : "\"rusage[mem=36000]\"",
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out",
@@ -30,7 +29,6 @@
     },
     "bismark_index" :
     {
-        "nCPUs"     : "1",
         "resources" : "\"rusage[mem=36000]\"",
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out",
@@ -39,7 +37,7 @@
     "bowtie_index" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\"",
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\"",
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out",
         "error"     : "log/cluster/{rule}.err"
@@ -48,48 +46,48 @@
     "star_align" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=7000] span[ptile=6]\""
+        "resources" : "\"rusage[mem=7000] span[hosts=1]\""
     },
 
     "rRNA" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
     },
     "globin" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
     },
     "phix" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
     },
     "ERCC" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
     },
     "bowtie_align" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
     },
     "bismark":
     {
-        "nCPUs"     : "20",
-        "resources" : "\"rusage[mem=3000] span[ptile=24]\""
+        "nCPUs"     : "12",
+        "resources" : "\"rusage[mem=4000] span[hosts=1]\""
     },
     "bismark_lambda":
     {
-        "nCPUs"     : "20",
-        "resources" : "\"rusage[mem=3000] span[ptile=24]\""
+        "nCPUs"     : "12",
+        "resources" : "\"rusage[mem=4000] span[hosts=1]\""
     },
     "rsem" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[ptile=6]\""
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
     },
     "qc53":
     {
