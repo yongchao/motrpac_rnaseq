@@ -6,7 +6,7 @@ BEGIN{
 !/^@/{
     #Do we need to consider the strand, probably not for rsem, but needed for others
     #remove the not uniquely aligned reads
-    umi=gensub("^.*:","","a",$1)
+    umi=gensub("^.*:","",1,$1)
     chr=$3
     pos1=$4
     pos2=$8

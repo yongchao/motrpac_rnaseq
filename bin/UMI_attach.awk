@@ -7,7 +7,7 @@ BEGIN{
 NR%4==1{
     rname=$1
     "zcat "Ifq|getline Iline
-    Irname=gensub(/ .*$/,"","a",Iline)
+    Irname=gensub(/ .*$/,"",1,Iline)
     if(Irname!=rname){
 	print NR":"rname" is not consistent with ",Irname," in index fastq file\n">"/dev/stderr"
 	exit 1

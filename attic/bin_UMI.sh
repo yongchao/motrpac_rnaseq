@@ -12,7 +12,7 @@ fi
 
 SID=$(basename $(dirname $bam))
 set +e #head has a problem with this
-len=$(samtools view $bam |head -1 |awk '{umi=gensub("^.*:","","a",$1); print length(umi)}')
+len=$(samtools view $bam |head -1 |awk '{umi=gensub("^.*:","",1,$1); print length(umi)}')
 set -e
 
 #filter uniquelly mapped reads

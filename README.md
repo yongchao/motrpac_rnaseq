@@ -25,7 +25,8 @@ We are heavily relying on conda to install/update many bioinformatics software w
       fastqc=0.11.8\
       bismark=0.20.0\
       subread=1.6.2\
-	  ucsc-gtftogenepred=366
+	  ucsc-gtftogenepred=366\
+	  gawk=4.2.1
   ```
 
 ## A.2 Bash environment setup
