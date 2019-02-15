@@ -75,7 +75,7 @@ We rely on the same set-up of conda installation so that the dependency software
 Details on setting-up the sequencing parameters for NuGEN are described in Section 1 of the MOP.
 * [bcl2fastq.sh](bin/bcl2fastq.sh) generates three fastq files, R1, I1 and R2. 
   All of the fastq files can be saved with `${SID}_R1.fastq.gz`, `${SID}_I1.fastq.gz` and `${SID}_R2.fastq.gz` under folder `fastq_raw`, where `SID` is the sample id. 
-* Using the mask in bcl2fastq command `--use-bases-mask Y*,I8Y*,I*,Y*`
+* Using the mask in bcl2fastq command `--use-bases-mask Y*,I8Y*,I*,Y*` and options `--mask-short-adapter-reads 0 --minimum-trimmed-read-length 0`
 * Joining fastq files from all lanes and renaming the files, note that the old `R2` becomes new `I1` and old `R3` becomes new `R2`. 
   ```bash
     cat  $fastq_folder/${SID}_S*_L00?_R1_001.fastq.gz  >${SID}_R1.fastq.gz

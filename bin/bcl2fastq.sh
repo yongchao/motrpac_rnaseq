@@ -13,7 +13,11 @@ cd bcl2fastq
 bcl2fastq --sample-sheet SampleSheet.csv \
 	  --use-bases-mask Y*,I8Y*,I*,Y* \
 	  -R  $bcl_folder \
+	  --mask-short-adapter-reads 0 \
+	  --minimum-trimmed-read-length 0 \
 	  -o . 
+#Please note that the options are necessary --mask-short-adapter-reads 0, --minimum-trimmed-read-length 0
+#for the index reads, otherwise all index reads are masked	  
 
 #The following command joins the fastq files from bcl2sfastq to fastq_raw folders
 #rename R2 to I1 and R3 to R2.
