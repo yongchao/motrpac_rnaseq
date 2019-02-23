@@ -18,8 +18,9 @@ STAR  --genomeDir $gdir/star_index\
       --outFileNamePrefix star_align/${SID}/\
       --readFilesCommand zcat \
       --outSAMattributes NH HI AS NM MD nM\
-      --outFilterType BySJout\
       --runThreadN $threads\
       --outSAMtype BAM SortedByCoordinate\
+      --outFilterType BySJout\
       --quantMode TranscriptomeSAM
 
+#--outFilterType BySJout\ with the the problem downstream analysis for the UMI as the paired reads have been removed

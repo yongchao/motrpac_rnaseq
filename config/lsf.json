@@ -115,4 +115,10 @@
         "output"    : "log/cluster/{rule}.out",
         "error"     : "log/cluster/{rule}.err"
     },
+    "meth_merge":
+    {
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
 }

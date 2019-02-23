@@ -267,14 +267,18 @@ rule pre_align_QC:
         multiqc.sh pre_align fastqc $fastqc_raw
         echo OK >{output}
         '''
+dup_input=expand("mark_dup/{sample}.dup_metrics",sample=samples)
+if I==len(samples):
+    dup_input.extend(expand("star_align/{sample}/{sample}_dup_log.txt",sample=samples))
+    
+
 rule qc_all:
     input:
         expand("globin/{sample}.txt",sample=samples),
         expand("phix/{sample}.txt",sample=samples),
         expand("rRNA/{sample}.txt",sample=samples),
         expand("star_align/{sample}/chr_info.txt",sample=samples),
-        expand("mark_dup/{sample}.dup_metrics",sample=samples),
-        expand("star_align/{sample}/{sample}_dup_log.txt",sample=samples),
+        dup_input,
         "log/OK.pre_align_QC",
         "log/OK.post_align_QC"
     output:
