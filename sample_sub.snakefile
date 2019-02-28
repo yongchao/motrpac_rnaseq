@@ -30,8 +30,11 @@ else:
     sys.exit(1)
 
 
+#added sort for the samples and fastqc-samples
 samples,=glob_wildcards(fastq_ini+"{sample,[^/]+}_R1.fastq.gz")
+samples.sort()
 fastqc_samples,=glob_wildcards(fastq_ini+"{sample,[^/]+_R[12]}.fastq.gz")
+fastqc_samples.sort()
 
 #construct R2 and I1 info
 R2={}
