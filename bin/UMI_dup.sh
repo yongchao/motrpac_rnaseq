@@ -16,9 +16,10 @@ set -e
 
 cd star_align/$SID
 
-tmpdir=../../tmpdir #this may avoid the nudup.py named pipe problems
-mkdir -p $tmpdir
-python2 $MOTRPAC_root/nugen/nudup.py $pairopt -s $len -l $len --rmdup-only -o $SID -T $tmpdir $bam
+#tmpdir=../../tmpdir, this one may still give the named pipe problem
 
+mkdir -p tmpdir #construct tmpdir indiviudally in each sub folder to avoid name conflict
+python2 $MOTRPAC_root/nugen/nudup.py $pairopt -s $len -l $len --rmdup-only -o $SID -T tmpdir $bam
+rm -rf tmpdir
 #remove these files
 rm $SID.sorted.dedup.bam
