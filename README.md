@@ -24,7 +24,7 @@ We are heavily relying on conda to install/update many bioinformatics software w
       bowtie2=2.3.4.3\
       fastqc=0.11.8\
       bismark=0.20.0\
-      subread=1.6.2\
+      subread=1.6.3\
 	  ucsc-gtftogenepred=366\
 	  gawk=4.2.1
   ```
