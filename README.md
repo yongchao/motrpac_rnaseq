@@ -14,7 +14,7 @@ We are heavily relying on conda to install/update many bioinformatics software w
   conda install \
       python=3.6.6 \
       snakemake=5.3.0\
-      star=2.6.1b\
+      star=2.7.0d\
       cutadapt=1.18 \
       picard=2.18.16 \
       samtools=1.3.1 \
