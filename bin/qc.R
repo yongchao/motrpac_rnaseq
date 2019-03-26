@@ -137,7 +137,7 @@ colnames(chr_info)<-paste0("%",colnames(chr_info))
 chr_info<-round(chr_info,dig=2)
 #Now putting all togther
 qc<-NULL
-if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%adapter_contained"=misc[,6],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
+if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%adapter_detected"=misc[,6],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
                    "%trimmed_bases"=round(trim[,"percent_trimmed"],dig=2))
 qc<-cbind(qc,reads=star[,1],"%GC"=round(fastqc[,"%GC"],dig=2),"%dup_sequence"=100-round(fastqc[,"total_deduplicated_percentage"],dig=2),
           misc[,1:4])

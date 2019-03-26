@@ -173,7 +173,7 @@ into the file `qc_info.csv` after the pipeline finishes.
 ## E.1 fastq metrics (raw and trimmed), collected from pre-alignment (see section C).
 For paired ends fastq files, the metrics has been averaged between the two files to get a single metric. Most qc metrics are extracted directly from Section 3.5 unless indicated otherwise.
 * reads_raw: number of reads in raw fastq files (in folder `fastq_raw`)
-* %adapter_contained: % of reads with the adapters contained (extracted from the cutadapt log file)
+* %adapter_detected: % of reads with adapters detected (extracted from the cutadapt log file)
 * %trimmed: % trimmed reads 
 * %trimmed_bases: % trimmed bases
 * reads: number of reads in the main fastq files (in folder `fastq_trim` when trimmed or in folder `fastq` when no trimming)
