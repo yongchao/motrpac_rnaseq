@@ -32,7 +32,9 @@ star<-star[samples,]
 NS<-length(samples)
 #read fastqc info
 fastqc<-readqcinfo("pre_align","fastqc")[,c("Total Sequences","%GC","total_deduplicated_percentage")]
+PAIRED<-FALSE
 if(2*length(grep("_R2$",rownames(fastqc)))==nrow(fastqc)){
+    PAIRED<-TRUE
     ##paired, so we do the average of R1 and R2
     id<-(1:(nrow(fastqc)/2))*2
     if(sum(sub("_R2$","_R1",rownames(fastqc)[id])
@@ -87,8 +89,8 @@ id<-grep("^%",colnames(qc53))
 qc53[,id]<-round(qc53[,id]*100,dig=2)
 
 ##collect data for rRNA, globin and phix and duplicates when present
-misc<-matrix(NA,NS,5)
-colnames(misc)<-c("globin","rRNA","phix","picard_dup","UMI_dup")
+misc<-matrix(NA,NS,6)
+colnames(misc)<-c("globin","rRNA","phix","picard_dup","UMI_dup","adapter_detected")
 for(i in 1:NS){
     SID<-samples[i]
     for(j in 1:3){ #change to 4 when good
@@ -100,6 +102,15 @@ for(i in 1:NS){
     if(UMI){
         zz<-pipe(paste0("tail -1 star_align/",SID,"/",SID,"_dup_log.txt |cut -f 6"))
         misc[i,5]<-scan(zz,n=1,quiet=TRUE)*100
+        close(zz)
+    }
+    if(TRIM){
+        zz<-pipe(paste0("grep \"with adapter\" fastq_trim/log/log.",SID,"|awk -F '[(%]' '{print $2}'"))
+        zval<-scan(zz,quiet=TRUE)
+        if(length(zval)!= PAIRED+1){
+            stop("the fastq_trim log for the contained adapter% is not consistent with the pairedness of the fastq data")
+        }
+        misc[i,6]<-mean(zval)
         close(zz)
     }
 }
@@ -126,7 +137,7 @@ colnames(chr_info)<-paste0("%",colnames(chr_info))
 chr_info<-round(chr_info,dig=2)
 #Now putting all togther
 qc<-NULL
-if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
+if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%adapter_contained"=misc[,6],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
                    "%trimmed_bases"=round(trim[,"percent_trimmed"],dig=2))
 qc<-cbind(qc,reads=star[,1],"%GC"=round(fastqc[,"%GC"],dig=2),"%dup_sequence"=100-round(fastqc[,"total_deduplicated_percentage"],dig=2),
           misc[,1:4])
@@ -138,4 +149,4 @@ qc<-cbind(qc,star[,-1],chr_info,qc53)
 id<-grep("_percent$",colnames(qc))
 colnames(qc)[id]<-paste0("%",sub("_percent$","",colnames(qc)[id]))
 
-write.table(qc,"qc_info.txt",row.names=TRUE,col.names=NA,quote=FALSE,sep="\t")
+write.table(qc,"qc_info.csv",row.names=TRUE,col.names=NA,quote=FALSE,sep=",")

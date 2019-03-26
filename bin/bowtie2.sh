@@ -36,7 +36,7 @@ sam=$dir/$SID.sam
 bowtie2 -p $threads $cmd -x $gref --local -S $sam
 
 #sometimes $sam is not generated due to zero alignment
-if [[ -e $sam ]]; then
+if [[ -f $sam ]]; then
     if  (($optb==1)); then
 	bam_unsorted=$dir/${SID}_unsorted.bam
 	bam=$dir/$SID.bam
