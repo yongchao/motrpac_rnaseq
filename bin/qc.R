@@ -108,7 +108,7 @@ for(i in 1:NS){
         zz<-pipe(paste0("grep \"with adapter\" fastq_trim/log/log.",SID,"|awk -F '[(%]' '{print $2}'"))
         zval<-scan(zz,quiet=TRUE)
         if(length(zval)!= PAIRED+1){
-            stop("the fastq_trim log for the contained adapter% is not consistent with the pairedness of the fastq data")
+            stop("the fastq_trim log for the contained adapter% is not consistent with the pairedness of the fastq data for sample", SID)
         }
         misc[i,6]<-mean(zval)
         close(zz)
