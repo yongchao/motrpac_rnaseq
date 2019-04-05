@@ -97,11 +97,15 @@ Details on setting-up the sequencing parameters for NuGEN are described in Secti
 If the snakemake is running OK locally, then submit the snakemake jobs to the cluster. This is only necessary for large jobs. These scripts were written for Sinai LSF and Stanford SLURM job submission systems. Other cluster job submission systems may need to write their own scripts and configuration files (`$MOTRPAC_root/config/`). 
 
 **For the Sinai LSF job submission system:**  
-  `bash $MOTRPAC_root/bin/Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95`
+```
+bash $MOTRPAC_root/bin/Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
+```
 
 **For a SLURM job submission system (e.g. SCG Informatics Cluster):**  
 * Where `${genome}` is defined as `hg38_gencode_v29` for human RNA-seq data or `rn6_ensembl_r95` for rat RNA-seq data, run the following command to run the pipeline with `sbatch`:  
-  `bash $MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir}`  
+```
+bash $MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir}`  
+```
 * Change `SBATCH` options as needed in `$MOTRPAC_root/config/slurm.json`.   
 
 # *Code implementation philosophy 
