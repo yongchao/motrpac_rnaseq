@@ -1,0 +1,119 @@
+{
+    "__default__" :
+    {
+        "nCPUs"     : "1",
+        "time"      : "24:00:00",
+        "mem"       : "6G",
+        "account"   : "smontgom",
+        "name"      : "{rule}.{wildcards.sample}",
+        "mail"      : "FAIL",
+        "output"    : "log/cluster/{rule}.{wildcards.sample}.out",
+        "error"     : "log/cluster/{rule}.{wildcards.sample}.err"
+    },
+
+    "star_index" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "4G",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    
+    "rsem_index" :
+    {
+        "mem"       : "36G",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    "bismark_index" :
+    {
+        "mem"       : "36G",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    "bowtie_index" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "6G",
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    
+    "star_align" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "30G"
+    },
+
+    "rRNA" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "20G"
+    },
+    "globin" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "20G"
+    },
+    "phix" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "30G"
+    },
+    "ERCC" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "20G"
+    },
+    "bowtie_align" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "30G"
+    },
+    "bismark":
+    {
+        "nCPUs"     : "12",
+        "mem"       : "20G"
+    },
+    "bismark_lambda":
+    {
+        "nCPUs"     : "12",
+        "mem"       : "20G"
+    },
+    "rsem" :
+    {
+        "nCPUs"     : "6",
+        "mem"       : "6G"
+    },
+    "qc53":
+    {
+        "mem"       : "20G"
+    },
+    "mark_dup":
+    {
+        "mem"       : "20G"
+    },
+    "qc_all":
+    {
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    "post_align_QC":
+    {
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+    "pre_align_QC":
+    {
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out",
+        "error"     : "log/cluster/{rule}.err"
+    },
+}
+
