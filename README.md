@@ -86,12 +86,14 @@ Details on setting-up the sequencing parameters for NuGEN are described in Secti
 ## B.2 Run the snakemake program
 * In a work folder, a subfolder `fastq_raw` contains the fastq files of all samples `${SID}_R1.fastq.gz`, `${SID}_I1.fastq.gz` and `${SID}_R2.fastq.gz`.
 * Make sure the `MOTRPAC_root`, `PATH` and other environmental variables have been setup correctly according to section A.2
+
+### B.2.1 Run the snakemake locally  
 * Run the command locally to debug possible problems below for the human genome  
   `snakemake -s $MOTRPAC_root/rna-seq.snakefile`
 * If the data is for rat samples, run the command below for the rat genome `rn6_ensembl_r95`  
   `snakemake -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95`
   
-### B.2.1 Run the snakemake on a cluster
+### B.2.2 Run the snakemake on a cluster
 If the snakemake is running OK locally, then submit the snakemake jobs to the cluster. This is only necessary for large jobs. These scripts were written for Sinai LSF and Stanford SLURM job submission systems. Other cluster job submission systems may need to write their own scripts and configuration files (`$MOTRPAC_root/config/`). 
 
 **For the Sinai LSF job submission system:**  
