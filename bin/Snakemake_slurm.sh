@@ -1,7 +1,9 @@
 #!/bin/bash 
 set -eux -o pipefail
 
-outdir=$1
+genome=$1
+outdir=$2
+
 indir=${outdir}/fastq_raw
 
 # export environmental variables
@@ -17,7 +19,6 @@ export PYTHONPATH=''
 # --account		"account"
 # --mail-type		"mail"
 # --output		"output"
-# --error		"error"
 
 # move to the folder where we want outputs
 cd ${outdir}
@@ -30,15 +31,14 @@ jsonfile=$MOTRPAC_root/config/slurm.json
 mkdir -p log/cluster
 
 snakemake -j 999 --snakefile $MOTRPAC_root/rna-seq.snakefile \
-					--config genome=rn6_ensembl_r95 \
 					--cluster-config $jsonfile \
+					--config genome=${genome} \
 					--cluster \
 					"sbatch --account={cluster.account} \
 						--time={cluster.time} \
 						--mem={cluster.mem} \
 						--cpus-per-task={cluster.nCPUs} \
 						--output={cluster.output} \
-						--error={cluster.error} \
 						--mail-type={cluster.mail}"
 															
 

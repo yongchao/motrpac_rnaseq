@@ -7,8 +7,7 @@
         "account"   : "smontgom",
         "name"      : "{rule}.{wildcards.sample}",
         "mail"      : "FAIL",
-        "output"    : "log/cluster/{rule}.{wildcards.sample}.out",
-        "error"     : "log/cluster/{rule}.{wildcards.sample}.err"
+        "output"    : "log/cluster/{rule}.{wildcards.sample}.out"
     },
 
     "star_index" :
@@ -16,63 +15,59 @@
         "nCPUs"     : "6",
         "mem"       : "4G",
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}.out",
-        "error"     : "log/cluster/{rule}.err"
+        "output"    : "log/cluster/{rule}.out"
     },
     
     "rsem_index" :
     {
         "mem"       : "36G",
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}.out",
-        "error"     : "log/cluster/{rule}.err"
+        "output"    : "log/cluster/{rule}.out"
     },
     "bismark_index" :
     {
         "mem"       : "36G",
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}.out",
-        "error"     : "log/cluster/{rule}.err"
+        "output"    : "log/cluster/{rule}.out"
     },
     "bowtie_index" :
     {
         "nCPUs"     : "6",
         "mem"       : "6G",
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}.out",
-        "error"     : "log/cluster/{rule}.err"
+        "output"    : "log/cluster/{rule}.out"
     },
     
     "star_align" :
     {
         "nCPUs"     : "6",
-        "mem"       : "30G"
+        "mem"       : "50G"
     },
 
     "rRNA" :
     {
         "nCPUs"     : "6",
-        "mem"       : "20G"
+        "mem"       : "40G"
     },
     "globin" :
     {
         "nCPUs"     : "6",
-        "mem"       : "20G"
+        "mem"       : "40G"
     },
     "phix" :
     {
         "nCPUs"     : "6",
-        "mem"       : "30G"
+        "mem"       : "40G"
     },
     "ERCC" :
     {
         "nCPUs"     : "6",
-        "mem"       : "20G"
+        "mem"       : "40G"
     },
     "bowtie_align" :
     {
         "nCPUs"     : "6",
-        "mem"       : "30G"
+        "mem"       : "40G"
     },
     "bismark":
     {
@@ -100,20 +95,17 @@
     "qc_all":
     {
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}.out",
-        "error"     : "log/cluster/{rule}.err"
+        "output"    : "log/cluster/{rule}.out"
     },
     "post_align_QC":
     {
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}.out",
-        "error"     : "log/cluster/{rule}.err"
+        "output"    : "log/cluster/{rule}.out"
     },
     "pre_align_QC":
     {
         "name"      : "{rule}",
-        "output"    : "log/cluster/{rule}.out",
-        "error"     : "log/cluster/{rule}.err"
+        "output"    : "log/cluster/{rule}.out"
     },
 }
 
