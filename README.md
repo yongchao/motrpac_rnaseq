@@ -90,8 +90,20 @@ Details on setting-up the sequencing parameters for NuGEN are described in Secti
   `snakemake -s $MOTRPAC_root/rna-seq.snakefile`
 * If the data is for rat samples, run the command below for the rat genome `rn6_ensembl_r95`  
   `snakemake -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95`
-* If the snakemake is running OK locally, then submit the snakemake jobs to the cluster. This is only necessary for large jobs. This script was written for Sinai LSF jobs submission system. Other cluster job submission system may need to write their own script.  
-  `Snakemake.lsf -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95`
+  
+### B.2.1 Run the snakemake on a cluster
+If the snakemake is running OK locally, then submit the snakemake jobs to the cluster. This is only necessary for large jobs. These scripts were written for Sinai LSF and Stanford SLURM job submission systems. Other cluster job submission systems may need to write their own scripts and configuration files (`$MOTRPAC_root/config/`). 
+
+**For the Sinai LSF job submission system:**  
+```
+bash $MOTRPAC_root/bin/Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
+```
+**For a SLURM job submission system (e.g. SCG Informatics Cluster):**  
+Where `${genome}` is defined as `hg38_gencode_v29` for human RNA-seq data or `rn6_ensembl_r95` for rat RNA-seq data, run the following command to run the pipeline with `sbatch`:
+```
+bash $MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir}
+```
+Change `SBATCH` options as needed in `$MOTRPAC_root/config/slurm.json`. 
 
 # *Code implementation philosophy 
 * The default uses `python3`, while a few tools relies on `python2`. Both python3 and python2 co-exists peacefully by calling `python2` for python2 specific scripts.
