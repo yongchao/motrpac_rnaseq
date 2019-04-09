@@ -8,7 +8,7 @@ while getopts bhd: o
 do      
     case "$o" in
         b) optb=1;;
-	d) dir="$OPTARG/";;
+	d) dir="$OPTARG";;
         h) echo "Usage: $0 [-h] [-b [-d dir] ] gref threads fq1 [fq2] "
            echo '-h: print help'
 	   echo '-b: compute the bam files'

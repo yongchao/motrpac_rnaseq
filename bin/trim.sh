@@ -4,7 +4,7 @@ set -euo pipefail
 #Note the input only includes R1 or R2 fastq files from the fastq_raw
 
 #index_adapter=AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC
-# univ_adapter=AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+#univ_adapter=AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
 #There adapters are too long, 3'end usually has lower quality
 
 #Following trim_galore approach, taking the first 13 bases
@@ -12,7 +12,23 @@ set -euo pipefail
 
 index_adapter=AGATCGGAAGAGC
 univ_adapter=AGATCGGAAGAGC
-#Future plan is to make the adpaters can be supplied on the fly
+
+#The following scrips make it possible to supplie the adpaters for non-mtropac projects
+while getopts a:A:h o 
+do      
+    case "$o" in
+        a) index_adapter="$OPTARG";;
+	A) univ_adapter="$OPTARG";;
+        h) echo "Usage: $0 [-h] [-a index_adapter ] [-A univ_adapter ] fq1 [fq2]"
+           echo '-h: print help'
+	   echo '-a index_adapater: set the index_adapter (default=AGATCGGAAGAGC)'
+	   echo '-A universal_adapater: set the univ_adapter (default=AGATCGGAAGAGC)'
+           exit 0;;
+    esac
+done
+
+shift $((OPTIND-1))
+
 #$2, when present, must be the same as $1 with R1 replaced by R2, not enforced here for now
 R1=$(basename $1)
 R2=""
