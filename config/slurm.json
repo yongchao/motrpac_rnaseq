@@ -57,17 +57,17 @@
     "phix" :
     {
         "nCPUs"     : "6",
-        "mem"       : "40G"
+        "mem"       : "60G"
     },
     "ERCC" :
     {
         "nCPUs"     : "6",
-        "mem"       : "40G"
+        "mem"       : "60G"
     },
     "bowtie_align" :
     {
         "nCPUs"     : "6",
-        "mem"       : "40G"
+        "mem"       : "60G"
     },
     "bismark":
     {
