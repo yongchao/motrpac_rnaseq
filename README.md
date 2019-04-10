@@ -98,13 +98,13 @@ If the snakemake is running OK locally, then submit the snakemake jobs to the cl
 
 **For the Sinai LSF job submission system:**  
 ```
-bash $MOTRPAC_root/bin/Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
+$MOTRPAC_root/bin/Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
 ```
 
 **For a SLURM job submission system (e.g. SCG Informatics Cluster):**  
 * Where `${genome}` is defined as `hg38_gencode_v29` for human RNA-seq data or `rn6_ensembl_r95` for rat RNA-seq data, run the following command to run the pipeline with `sbatch`:  
 ```
-bash $MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir} 
+$MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir} 
 ```
 * Change `SBATCH` options as needed in `$MOTRPAC_root/config/slurm.json`.   
 
