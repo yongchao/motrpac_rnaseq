@@ -98,11 +98,7 @@ If the snakemake is running OK locally, then submit the snakemake jobs to the cl
 
 **For the Sinai LSF job submission system:**  
 ```
-<<<<<<< HEAD
 Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
-=======
-$MOTRPAC_root/bin/Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
->>>>>>> 986c55686ecbf5f435e1f3505c95b419c124c2d4
 ```
 
 **For a SLURM job submission system (e.g. SCG Informatics Cluster):**  
@@ -125,3 +121,4 @@ $MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir}
 # *The implementation details
 * The implementation details on the RNA-seq MOP can be seen in [MOP\_details.md](MOP_details.md). 
 * The commands in [MOP\_details.md](MOP_details.md) don't need to be run separately as everything has already been taken care of by the snakemake commands in the above Section B.2 
+
