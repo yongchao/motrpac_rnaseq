@@ -98,7 +98,7 @@ If the snakemake is running OK locally, then submit the snakemake jobs to the cl
 
 **For the Sinai LSF job submission system:**  
 ```
-$MOTRPAC_root/bin/Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
+Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
 ```
 
 **For a SLURM job submission system (e.g. SCG Informatics Cluster):**  
