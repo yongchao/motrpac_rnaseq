@@ -1,8 +1,8 @@
 ##This file needs to be run interactively to spot problems
 ##Download the files specified in the human and rat
-#as of Nov 20, 2018
+#as of April 11, 2019
 
-#The following is for the hg38 gencode version 29
+#The following is for the hg38 gencode version 30
 
 #MOTRPAC_root should be set to the root of the code base
 #MOTRPAC_refdata should be set to the intended genome reference data
@@ -10,17 +10,17 @@
 #The environments should be setup accorrding to load_motrpac.sh and after the softwares have been installed by conda_install.sh
 
 cd $MOTRPAC_refdata
-mkdir -p hg38_gencode_v29/source
-cd hg38_gencode_v29/source
-wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.primary_assembly.annotation.gtf.gz
-wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/GRCh38.primary_assembly.genome.fa.gz
+mkdir -p hg38_gencode_v30/source
+cd hg38_gencode_v30/source
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/gencode.v30.primary_assembly.annotation.gtf.gz
+wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/GRCh38.primary_assembly.genome.fa.gz
 
-#The following is for the rn6 ensembl release version 95
+#The following is for the rn6 ensembl release version 96
 cd $MOTRPAC_refdata
-mkdir -p rn6_ensembl_r95/source
-cd rn6_ensembl_r95/source
-wget ftp://ftp.ensembl.org/pub/release-95/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz
-wget ftp://ftp.ensembl.org/pub/release-95/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.95.gtf.gz
+mkdir -p rn6_ensembl_r96/source
+cd rn6_ensembl_r96/source
+wget ftp://ftp.ensembl.org/pub/release-96/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz
+wget ftp://ftp.ensembl.org/pub/release-96/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.96.gtf.gz
 
 #The following is for the mm10 gencode version v19, not used for MotrPAC, but for other purpose
 cd $MOTRPAC_refdata

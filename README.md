@@ -40,24 +40,24 @@ We rely on the same set-up of conda installation so that the dependency software
 
 ## A.3 Download the genome source and build the refdata
 * Follow the commands in [source\_data.sh](bin/source_data.sh) to download the genome source data (fa and gtf from gencode and ensembl) and also build the bowtie2\_index for the miscellaneous small data (globin and rRNA)
-* Running the snakefile [genome\_index.snakefile](genome\_index.snakefile) to build the genome index for each genome folder that was downloaded by [source\_data.sh](bin/source_data.sh). The following is an example hg38\_gencode\_v29
+* Running the snakefile [genome\_index.snakefile](genome\_index.snakefile) to build the genome index for each genome folder that was downloaded by [source\_data.sh](bin/source_data.sh). The following is an example hg38\_gencode\_v30
   ```bash
-  cd  $MOTRPAC_refdata/hg38_gencode_v29
+  cd  $MOTRPAC_refdata/hg38_gencode_v30
   snakemake -s $MOTRPAC_root/genome_index.snakefile
   #The above snakemake command can use more than one CPU core to speed it up as below
   #snakemake -j $NUMBEER_OF_CPUS -s $MOTRPAC_root/genome_index.snakefile
   #The computation be further sped up by submitting the jobs to clusters, see section B.2 on the details.
   ```
 * The following gives the implementation technical details of the above commands and *these commands shouldn't run separately*.  
-  * Human data is on `hg38_gencode_v29` from gencode
+  * Human data is on `hg38_gencode_v30` from gencode
     ```bash
-    ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/gencode.v29.primary_assembly.annotation.gtf.gz
-    ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_29/GRCh38.primary_assembly.genome.fa.gz
+	ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/gencode.v30.primary_assembly.annotation.gtf.gz
+	ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_30/GRCh38.primary_assembly.genome.fa.gz
     ```
-  * Rat data is on `rn6_ensembl_r95` from ensembl
+  * Rat data is on `rn6_ensembl_r96` from ensembl
     ```bash
-    ftp://ftp.ensembl.org/pub/release-95/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz
-	ftp://ftp.ensembl.org/pub/release-95/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.95.gtf.gz
+	ftp://ftp.ensembl.org/pub/release-96/fasta/rattus_norvegicus/dna/Rattus_norvegicus.Rnor_6.0.dna.toplevel.fa.gz
+	ftp://ftp.ensembl.org/pub/release-96/gtf/rattus_norvegicus/Rattus_norvegicus.Rnor_6.0.96.gtf.gz
     ```
   * The gtf and fa files from ensembl have been modified to have "chr" as part of the chromosome name as in gencode data, see [fixchr4ensembl.sh](bin/fixchr4ensembl.sh) for details
   * The gtf file is sorted, details can be seen in [genome.sh](bin/genome.sh)
@@ -90,19 +90,19 @@ Details on setting-up the sequencing parameters for NuGEN are described in Secti
 ### B.2.1 Run the snakemake locally  
 * Run the command locally to debug possible problems below for the human genome  
   `snakemake -s $MOTRPAC_root/rna-seq.snakefile`  
-* If the data is for rat samples, run the command below for the rat genome `rn6_ensembl_r95`  
-  `snakemake -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95`  
+* If the data is for rat samples, run the command below for the rat genome `rn6_ensembl_r96`  
+  `snakemake -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r96`  
   
 ### B.2.2 Run the snakemake on a cluster
 If the snakemake is running OK locally, then submit the snakemake jobs to the cluster. This is only necessary for large jobs. These scripts were written for Sinai LSF and Stanford SLURM job submission systems. Other cluster job submission systems may need to write their own scripts and configuration files (`$MOTRPAC_root/config/`). 
 
 **For the Sinai LSF job submission system:**  
 ```
-Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r95
+Snakemake_lsf.sh -- -s $MOTRPAC_root/rna-seq.snakefile --config genome=rn6_ensembl_r96
 ```
 
 **For a SLURM job submission system (e.g. SCG Informatics Cluster):**  
-* Where `${genome}` is defined as `hg38_gencode_v29` for human RNA-seq data or `rn6_ensembl_r95` for rat RNA-seq data, run the following command to run the pipeline with `sbatch`:  
+* Where `${genome}` is defined as `hg38_gencode_v30` for human RNA-seq data or `rn6_ensembl_r96` for rat RNA-seq data, run the following command to run the pipeline with `sbatch`:  
 ```
 $MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir} 
 ```
