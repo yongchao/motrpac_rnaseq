@@ -30,7 +30,7 @@ mkdir -p fastq_raw
 cd fastq_raw
 
 
-R3=$(find ../bcl2fastq -name "${SID}_S0_L00?_R3_001.fastq.gz" | wc -l)
+R3=$(find ../bcl2fastq -name "Undetermined_S0_L00?_R3_001.fastq.gz" | wc -l)
 #R3==0 means no UMI
 #currently, it can process the data with or without UMI
 for SID in $samples; do
