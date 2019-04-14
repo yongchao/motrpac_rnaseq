@@ -20,13 +20,13 @@ We are heavily relying on conda to install/update many bioinformatics software w
       samtools=1.3.1 \
       r-base=3.4.1 \
       rsem=1.3.1 \
-      multiqc=1.6 \
+      multiqc=1.7 \
       bowtie2=2.3.4.3\
       fastqc=0.11.8\
       bismark=0.20.0\
       subread=1.6.3\
-	  ucsc-gtftogenepred=366\
-	  gawk=4.2.1
+      ucsc-gtftogenepred=366\
+      gawk=4.2.1
   ```
 
 ## A.2 Bash environment setup

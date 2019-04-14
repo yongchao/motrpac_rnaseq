@@ -9,5 +9,8 @@ pairopt=""
 if (( $paired == 1 )); then
     pairopt="-p"
 fi
-   
-featureCounts -a $gdir/genome.gtf -o featureCounts/$SID $pairopt -M --fraction $bam
+
+tmpdir=featureCounts/${SID}_tmp   
+mkdir -p $tmpdir
+featureCounts -T $threads --tmpDir $tmpdir  -a $gdir/genome.gtf -o featureCounts/$SID $pairopt -M --fraction $bam
+rm -rf $tmpdir

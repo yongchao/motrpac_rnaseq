@@ -14,7 +14,7 @@
 #${sid}_R2.fastq.gz, required for pairied end reads
 #${sid}_I1.fastq.gz, required for NuGEN with UMI for UMI processsing
 
-#configure genome by using --config genome=hg38_gencode_v29 etc
+#configure genome by using --config genome=hg38_gencode_v30 etc
 #Updating the link for rn6 and hg38 in $MOTRPAC_refdata so that we don't have to specify the whole name
 
 include: "sample_sub.snakefile"
@@ -117,6 +117,7 @@ rule featureCounts:
         "star_align/{sample}/Aligned.sortedByCoord.out.bam"
     output:
         "featureCounts/{sample}"
+    threads: 1
     log:
         "featureCounts/log/{sample}.log"
     params:
@@ -137,7 +138,7 @@ rule rRNA:
         rRNA=$(species.sh {gdir})_rRNA
         gref=$gdir_root/misc_data/$rRNA/$rRNA
         out_tmp=rRNA/{wildcards.sample}_tmp.txt
-        bowtie2.sh $gref {threads} {input} >& $out_tmp
+        bowtie2.sh -d rRNA $gref {threads} {input} >& $out_tmp
         mv $out_tmp {output}
         '''
 rule phix:
@@ -151,7 +152,7 @@ rule phix:
         gdir_root=$(dirname {gdir})
         gref=$gdir_root/misc_data/phix/phix
         out_tmp=phix/{wildcards.sample}_tmp.txt
-        bowtie2.sh $gref {threads} {input} >& $out_tmp
+        bowtie2.sh -d phix $gref {threads} {input} >& $out_tmp
         mv $out_tmp {output}
         '''
 rule globin:
@@ -166,7 +167,7 @@ rule globin:
         globin=$(species.sh {gdir})_globin
         gref=$gdir_root/misc_data/$globin/$globin
         out_tmp=globin/{wildcards.sample}_tmp.txt
-        bowtie2.sh $gref {threads} {input} >& $out_tmp
+        bowtie2.sh -d globin $gref {threads} {input} >& $out_tmp
         mv $out_tmp {output}
         '''
 rule qc53:

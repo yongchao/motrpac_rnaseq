@@ -8,7 +8,7 @@ root=os.environ['MOTRPAC_root']
 if "genome" in config:
     gdir=os.environ['MOTRPAC_refdata']+"/"+config["genome"]
 else:
-    gdir=os.environ['MOTRPAC_refdata']+"/hg38_gencode_v29"
+    gdir=os.environ['MOTRPAC_refdata']+"/hg38_gencode_v30"
 
 #If softlinks fastq_raw to fastq folder, then no trim is happening
     

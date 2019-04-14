@@ -35,6 +35,7 @@ sam=$dir/$SID.sam
 #Using local in case the the adapter is not working
 bowtie2 -p $threads $cmd -x $gref --local -S $sam
 
+sleep 5 #sometimes it takes time for the cluster to update
 #sometimes $sam is not generated due to zero alignment
 if [[ -f $sam && -s $sam ]]; then
     if  (($optb==1)); then

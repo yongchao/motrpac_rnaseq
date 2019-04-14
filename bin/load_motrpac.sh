@@ -9,8 +9,8 @@ set -eu -o pipefail
 
 #load_motrpac.sh might be a link
 root=$(dirname $(readlink -m $(dirname $0))) #find out the real motrpac root folder
-conda=/sc/orga/projects/sealfs01a/conda #sinai default
-refdata=/sc/orga/projects/sealfs01a/motrpac_refdata #sinai default
+conda=/sc/hydra/projects/sealfs01a/conda #sinai default
+refdata=/sc/hydra/projects/sealfs01a/motrpac_refdata #sinai default
 while getopts hc:r: o 
 do      
     case "$o" in
