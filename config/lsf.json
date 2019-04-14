@@ -95,7 +95,7 @@
     },
     "mark_dup":
     {
-        "resources" : "\"rusage[mem=20000]\"",
+        "resources" : "\"rusage[mem=30000]\"",
     },
     "qc_all":
     {
