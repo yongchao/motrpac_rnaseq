@@ -45,7 +45,7 @@ conda install \
       samtools=1.3.1 \
       r-base=3.4.1 \
       rsem=1.3.1 \
-      multiqc=1.7 \
+      multiqc=1.6 \
       bowtie2=2.3.4.3\
       fastqc=0.11.8 \
       bismark=0.20.0\

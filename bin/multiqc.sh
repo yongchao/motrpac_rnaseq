@@ -10,8 +10,11 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export TMPDIR=tmpdir
 mkdir -p $TMPDIR
+
+set +e #multiqc gives warning
 multiqc -d \
 	-f \
 	-n $name \
 	-o multiqc \
 	"$@"
+set -e
