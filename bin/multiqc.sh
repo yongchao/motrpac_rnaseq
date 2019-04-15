@@ -11,7 +11,6 @@ export LANG=en_US.UTF-8
 export TMPDIR=tmpdir
 mkdir -p $TMPDIR
 
-#to do for the bug in cluster
 multiqc -d \
 	-f \
 	-n $name \

@@ -106,12 +106,14 @@
     "post_align_QC":
     {
         "name"      : "{rule}",
+        "resources" : "\"rusage[mem=40000]\"",
         "output"    : "log/cluster/{rule}.out",
         "error"     : "log/cluster/{rule}.err"
     },
     "pre_align_QC":
     {
         "name"      : "{rule}",
+        "resources" : "\"rusage[mem=40000]\"",
         "output"    : "log/cluster/{rule}.out",
         "error"     : "log/cluster/{rule}.err"
     },
