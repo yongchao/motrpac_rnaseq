@@ -90,7 +90,7 @@
     },
     "mark_dup":
     {
-        "mem"       : "20G"
+        "mem"       : "30G"
     },
     "qc_all":
     {
@@ -99,13 +99,20 @@
     },
     "post_align_QC":
     {
+        "mem"       : "40G",
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out"
     },
     "pre_align_QC":
     {
+        "mem"       : "40G",
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out"
     },
+    "meth_merge":
+    {
+        "name"      : "{rule}",
+        "output"    : "log/cluster/{rule}.out"
+    }
 }
 
