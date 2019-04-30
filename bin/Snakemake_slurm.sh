@@ -33,7 +33,7 @@ mkdir -p log/cluster
 snakemake -j 999 --snakefile $MOTRPAC_root/rna-seq.snakefile \
 					--cluster-config $jsonfile \
 					--config genome=${genome} \
-					--latency-wait 30 \
+					--latency-wait 90 \
 					--cluster \
 					"sbatch --account={cluster.account} \
 						--time={cluster.time} \

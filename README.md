@@ -121,3 +121,4 @@ $MOTRPAC_root/bin/Snakemake_slurm.sh ${genome} ${outdir}
 # *The implementation details
 * The implementation details on the RNA-seq MOP can be seen in [MOP\_details.md](MOP_details.md). 
 * The commands in [MOP\_details.md](MOP_details.md) don't need to be run separately as everything has already been taken care of by the snakemake commands in the above Section B.2 
+
