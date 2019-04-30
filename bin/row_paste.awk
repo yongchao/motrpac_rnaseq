@@ -81,6 +81,7 @@ END{
     system("cat "outfile)
     #remove the temporary files
     system("rm -f "outfile)
+    #print outfile >"/dev/stderr" 
     system("rm -f "out1file)
     system("rm -f "infofile)
     system("rm -f "info1file)

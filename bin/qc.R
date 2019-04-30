@@ -82,8 +82,9 @@ id<-c("CODING","UTR","INTRONIC","INTERGENIC","MRNA")
 loc<-match(c(paste0("PCT_",id,"_BASES"),"MEDIAN_5PRIME_TO_3PRIME_BIAS"),
            colnames(qc53)[1:Nqc53])
 qc53<-qc53[,loc,drop=FALSE]
+qc53<-round(qc53,dig=2)
 id2<-tolower(id)
-colnames(qc53)[1:6]<-c(paste0("%",id2),"median_5'_3'_bias")
+colnames(qc53)[1:6]<-c(paste0("%",id2),"median_5_3_bias")
 
 id<-grep("^%",colnames(qc53))
 qc53[,id]<-round(qc53[,id]*100,dig=2)
@@ -148,5 +149,7 @@ qc<-cbind(qc,star[,-1],chr_info,qc53)
 
 id<-grep("_percent$",colnames(qc))
 colnames(qc)[id]<-paste0("%",sub("_percent$","",colnames(qc)[id]))
+colnames(qc)<-sub("^%","pct_",colnames(qc))
 
+#We could have write a date and the project folder here
 write.table(qc,"qc_info.csv",row.names=TRUE,col.names=NA,quote=FALSE,sep=",")

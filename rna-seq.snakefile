@@ -202,8 +202,8 @@ rule featureCounts_all:
         "log/featureCounts.log"
     shell:
         '''
-        cat samples | awk '{{print "featureCounts/"$0"\t"$0}}' |
-        row_paste.awk infoid=1 colid=0 skip=1 >featureCounts.txt 2>{log}
+        cat samples | awk '{{print "featureCounts/"$0"\t"$0}}' >.samples_feature
+        row_paste.awk infoid=1 colid=0 skip=1 <.samples_feature >featureCounts.txt 2>{log}
         echo "Finished featureCounts" >{output}
         '''
         
