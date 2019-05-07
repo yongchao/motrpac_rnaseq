@@ -3,7 +3,8 @@ set -eu -o pipefail
 bam=$1 #star_align/{sample}_Aligned.sortedByCoord.out.bam
 SID=$(basename $(dirname $bam))
 PICARD=$(dirname $(readlink -e $(which picard)))/picard.jar
-java -jar $PICARD MarkDuplicates \
+#In future try to obtain from the resources
+java -Xmx35000M -jar $PICARD MarkDuplicates \
      I=$bam \
      O=mark_dup/${SID}_markedDup.bam \
      CREATE_INDEX=true \

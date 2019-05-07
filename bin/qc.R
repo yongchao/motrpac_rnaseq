@@ -32,16 +32,19 @@ star<-star[samples,]
 NS<-length(samples)
 #read fastqc info
 fastqc<-readqcinfo("pre_align","fastqc")[,c("Total Sequences","%GC","total_deduplicated_percentage")]
-PAIRED<-FALSE
-if(2*length(grep("_R2$",rownames(fastqc)))==nrow(fastqc)){
-    PAIRED<-TRUE
+All_Single<-TRUE
+if(length(grep("_R2$",rownames(fastqc)))>0){
+    #some are paired
+    All_single<-FALSE
     ##paired, so we do the average of R1 and R2
-    id<-(1:(nrow(fastqc)/2))*2
-    if(sum(sub("_R2$","_R1",rownames(fastqc)[id])
-           !=rownames(fastqc)[id-1])!=0){
-        stop("the R1 and R2 files do not match in the fastqc info")
-    }
-    fastqc<-(fastqc[id-1,]+fastqc[id,])/2
+    #id<-(1:(nrow(fastqc)/2))*2
+    #if(sum(sub("_R2$","_R1",rownames(fastqc)[id])
+    #       !=rownames(fastqc)[id-1])!=0){
+    #    stop("the R1 and R2 files do not match in the fastqc info")
+    #}
+    ##fastqc<-(fastqc[id-1,]+fastqc[id,])/2
+    lab<-sub("_R2$","_R1",rownames(fastqc))
+    fastqc<-apply(fastqc,2,function(x){tapply(x,lab,mean)})
 }
 rownames(fastqc)<-sub("_R1$","",rownames(fastqc))
 
@@ -108,9 +111,10 @@ for(i in 1:NS){
     if(TRIM){
         zz<-pipe(paste0("grep \"with adapter\" fastq_trim/log/log.",SID,"|awk -F '[(%]' '{print $2}'"))
         zval<-scan(zz,quiet=TRUE)
-        if(length(zval)!= PAIRED+1){
-            stop("the fastq_trim log for the contained adapter% is not consistent with the pairedness of the fastq data for sample", SID)
-        }
+        ##future plan is to consider the paired info for each indivudal files
+        #if(length(zval)!= PAIRED+1){
+        #    stop("the fastq_trim log for the contained adapter% is not consistent with the pairedness of the fastq data for sample", SID)
+        #}
         misc[i,6]<-mean(zval)
         close(zz)
     }
