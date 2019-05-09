@@ -20,7 +20,7 @@ checknames<-function(x,title)
 star<-t(read.delim("star_align/star_QC.txt",sep="\t",row.names=1,strip.white=TRUE,check.names=FALSE))
 star<-star[,c(6,7,9:17,25,27,29,30,31,34)]
 colnames(star)<-c("reads","avg_input_read_length","uniquely_mapped","%uniquely_mapped","avg_mapped_read_length",
-                  "num_splices","num_annotated_splices","num_GTAG_splices","num_GCAG_splice","num_ATAC_splices",
+                  "num_splices","num_annotated_splices","num_GTAG_splices","num_GCAG_splices","num_ATAC_splices",
                   "num_noncanonical_splices","%multimapped","%multimapped_toomany","%unmapped_mismatches","%unmapped_tooshort",
                   "%unmapped_other","%chimeric")
 star<-sub("%$","",star)
