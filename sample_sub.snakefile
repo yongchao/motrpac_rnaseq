@@ -10,6 +10,13 @@ if "genome" in config:
 else:
     gdir=os.environ['MOTRPAC_refdata']+"/hg38_gencode_v30"
 
+#setup tmpdir is only necessary for someplatforms where tmpdir is much faster than the NFS.
+#default to be ".".
+if "tmpdir" in config:
+    tmpdir=config['tmpdir']
+else:
+    tmpdir=os.getenv('MOTRPAC_tmpdir', ".")
+
 #If softlinks fastq_raw to fastq folder, then no trim is happening
     
 #do not allow to go to the sub directory
