@@ -139,7 +139,10 @@ for(i in 1:NS){
     chr_info[i,1:5]<-readchr(samples[i])
 }
 colnames(chr_info)<-paste0("%",colnames(chr_info))
-chr_info<-round(chr_info,dig=2)
+##keep chry with four digits
+chr_info[,2]<-round(chr_info[,2],dig=4)
+chr_info[,-2]<-round(chr_info[,-2],dig=2)
+
 #Now putting all togther
 qc<-NULL
 if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%adapter_detected"=misc[,6],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
