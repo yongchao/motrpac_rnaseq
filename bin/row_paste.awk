@@ -1,4 +1,4 @@
-#!/bin/awk -f
+#!/usr/bin/awk -f
 ##row_paste.awk infoid=1 colid=0 <samples.txt
 ##skip=1, the number of lines to skip
 ##samples.txt is tab delimited file with two columns, one is the the file name and the other is the sample_ID
