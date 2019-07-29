@@ -16,17 +16,16 @@ BEGIN{
     infofile=gettmpfilename(tmpdir)
     info1file=gettmpfilename(tmpdir)
     tmpfile=gettmpfilename(tmpdir)
-    headerfile=gettmpfilename(tmpdir)
 }
 NR==1{
     tailm="tail -n +"skip+2" "#just the main content
     if(skip==-1){
-	tailh="head -1 " #a fake head line
+	tailh="head -1 "$1 #a fake head line
     }else{
-	tailh="head -"skip+1" |tail -1 "#with the head line
+	tailh="head -"skip+1" "$1" |tail -1 "#with the head line
     }
 
-    tailh $1 | getline header
+    tailh | getline header
     nf=split(header,headv,"\t")
     if(infoid==0){
 	 infoid=1
@@ -36,15 +35,15 @@ NR==1{
     }else if(colid<0){
 	colid=nf-colid
     }
-    print "infoid="infoid >"/dev/stderr"
-    print "colid="colid >"/dev/stderr"
-
     if(skip>=0){
-	outhead=headv[colid]
+	outhead=headv[infoid]
     }else{
 	outhead="field"
     }
-    
+    print "infoid="infoid >"/dev/stderr"
+    print "colid="colid >"/dev/stderr"
+    print "outhead="outhead>"/dev/stderr"
+
     sample=$1
     if(NF>=2){#the last column may become the label
 	sample=$2
@@ -67,7 +66,7 @@ NR!=1{
     system(tailm $1"|cut -f "infoid" >"info1file) 
     status=system("cmp "info1file" "info1file">/dev/null")
     if(status!=0){
-       print "The file "$1 " has differenct info\n"
+       print "The file "$1 " has differenct info\n">"/dev/stderr"
        exit 1
    }
    system(tailm $1"|cut -f "colid" >"out1file) 
@@ -86,7 +85,6 @@ END{
     system("rm -f "infofile)
     system("rm -f "info1file)
     system("rm -f "tmpfile)
-    system("rm -f "headerfile)
 }
 function gettmpfilename(tmpdir,  res,cmd){
     cmd="mktemp --tmpdir="tmpdir

@@ -203,7 +203,7 @@ rule featureCounts_all:
     shell:
         '''
         cat samples | awk '{{print "featureCounts/"$0"\t"$0}}' >.samples_feature
-        row_paste.awk infoid=1 colid=0 skip=1 <.samples_feature >featureCounts.txt 2>{log}
+		col_paste.sh  -s 1 .samples_feature >featureCounts.txt 2>{log}
         echo "Finished featureCounts" >{output}
         '''
         
@@ -217,8 +217,8 @@ rule star_align_all:
         "log/star_align.log"
     shell:
         '''
-        cat samples | awk '{{print "star_align/"$0"/Log.final.out\t"$0}}' |
-            row_paste.awk infoid=1 colid=0 skip=-1 >star_align/star_QC.txt 2>{log}
+        cat samples | awk '{{print "star_align/"$0"/Log.final.out\t"$0}}'>.samples.star
+		col_paste.sh -s -1 .samples.star >star_align/star_QC.txt 2>{log}
         echo "OK" > {output}
         '''
 def fastqc_all_input(wildcards):
@@ -303,8 +303,8 @@ rule rsem_all:
     shell:
         '''
         cat samples | awk '{{print "rsem/"$0".genes.results\t"$0}}'  > .samples.rsem
-        row_paste.awk colid=6 < .samples.rsem >rsem_genes_tpm.txt 2>{log}
-        row_paste.awk colid=7 < .samples.rsem >rsem_genes_fpkm.txt 2>>{log}
-        row_paste.awk colid=5 < .samples.rsem >rsem_genes_count.txt 2>>{log}
+        col_paste.sh -c 6 .samples.rsem >rsem_genes_tpm.txt 2>{log}
+        col_paste.sh -c 7 .samples.rsem >rsem_genes_fpkm.txt 2>>{log}
+        col_paste.sh -c 5 .samples.rsem >rsem_genes_count.txt 2>>{log}
         echo "Finished rsem">{output}
         '''

@@ -10,7 +10,7 @@ SID=$(basename $1 _R1.fastq.gz)
 
 mkdir -p star_align/$SID
 
-tmpdir=$(mktemp -d -p $tmpdir_root star_align.${SID}.XXX)/tmp 
+tmpdir=$(mktemp -d -p $tmpdir_root star_align.${SID}.XXX)
 #why is this required
 #ulimit -v 41000000000
 
@@ -24,6 +24,6 @@ STAR  --genomeDir $gdir/star_index\
       --outSAMtype BAM SortedByCoordinate\
       --outFilterType BySJout\
       --quantMode TranscriptomeSAM\
-      --outTmpDir $tmpdir
+      --outTmpDir $tmpdir/tmp
 rm -rf $tmpdir
 #--outFilterType BySJout\ with the the problem downstream analysis for the UMI as the paired reads have been removed

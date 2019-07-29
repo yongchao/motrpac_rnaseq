@@ -46,5 +46,5 @@ mkdir -p log/cluster
 
 set -x
 
-snakemake -j 999 --cluster-config $jsonfile --cluster "bsub $cmdm -W $optW -P $optP $cmdx -q $optq -n $optn -R $optR -oo {cluster.output} -eo {cluster.error} -J {cluster.name}" "$@"
+snakemake -j 9999 --cluster-config $jsonfile --cluster "bsub $cmdm -W $optW -P $optP $cmdx -q $optq -n $optn -R $optR -oo {cluster.output} -eo {cluster.error} -J {cluster.name}" "$@"
 

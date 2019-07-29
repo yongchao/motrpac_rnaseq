@@ -85,12 +85,12 @@ id<-c("CODING","UTR","INTRONIC","INTERGENIC","MRNA")
 loc<-match(c(paste0("PCT_",id,"_BASES"),"MEDIAN_5PRIME_TO_3PRIME_BIAS"),
            colnames(qc53)[1:Nqc53])
 qc53<-qc53[,loc,drop=FALSE]
-qc53<-round(qc53,dig=2)
+qc53<-round(qc53,dig=3)
 id2<-tolower(id)
 colnames(qc53)[1:6]<-c(paste0("%",id2),"median_5_3_bias")
 
 id<-grep("^%",colnames(qc53))
-qc53[,id]<-round(qc53[,id]*100,dig=2)
+qc53[,id]<-round(qc53[,id]*100,dig=3)
 
 ##collect data for rRNA, globin and phix and duplicates when present
 misc<-matrix(NA,NS,6)
@@ -119,7 +119,7 @@ for(i in 1:NS){
         close(zz)
     }
 }
-misc<-round(misc,dig=2)
+misc<-round(misc,dig=3)
 colnames(misc)<-paste0("%",colnames(misc))
 
 ##Read the chr_info.txt
@@ -140,14 +140,14 @@ for(i in 1:NS){
 }
 colnames(chr_info)<-paste0("%",colnames(chr_info))
 ##keep chry with four digits
-chr_info[,2]<-round(chr_info[,2],dig=4)
-chr_info[,-2]<-round(chr_info[,-2],dig=2)
+chr_info[,2]<-round(chr_info[,2],dig=5)
+chr_info[,-2]<-round(chr_info[,-2],dig=3)
 
 #Now putting all togther
 qc<-NULL
-if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%adapter_detected"=misc[,6],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=2),
-                   "%trimmed_bases"=round(trim[,"percent_trimmed"],dig=2))
-qc<-cbind(qc,reads=star[,1],"%GC"=round(fastqc[,"%GC"],dig=2),"%dup_sequence"=round(100-fastqc[,"total_deduplicated_percentage"],dig=2),
+if(TRIM) qc<-cbind("reads_raw"=fastqc_raw[,1],"%adapter_detected"=misc[,6],"%trimmed"=round(100-as.numeric(star[,1])/fastqc_raw[,"Total Sequences"]*100,dig=3),
+                   "%trimmed_bases"=round(trim[,"percent_trimmed"],dig=3))
+qc<-cbind(qc,reads=star[,1],"%GC"=round(fastqc[,"%GC"],dig=3),"%dup_sequence"=round(100-fastqc[,"total_deduplicated_percentage"],dig=3),
           misc[,1:4])
 if(UMI){
     qc<-cbind(qc,"%umi_dup"=misc[,5])
