@@ -16,6 +16,8 @@ optq="{cluster.queue}"
 optR="{cluster.resources}"
 cmdm=""
 cmdx=""
+cmdK=""
+
 while getopts j:W:P:q:n:R:m:hx o 
 do      
     case "$o" in
@@ -26,12 +28,14 @@ do
 	n) optn="$OPTARG";;
 	R) optR="$OPTARG";;
 	m) cmdm="-m $OPTARG";;
+	K) cmdK="-K";;
 	x) cmdx="-sla Sealfon";;
-        h) echo "Usage: $0 [-h] [-j json] [-W wall_time] [-P account] [-q queue [-p proj] [-- -s snakefile and other snakemake options]"
+        h) echo "Usage: $0 [-h] [-j json] [-W wall_time] [-P account] [-q queue [-p proj] [-K] [-- -s snakefile and other snakemake options]"
            echo '-h: print help'
 	   echo "-j: the json file (default $MOTRPAC_ROOT/config/lsf.json)"
            echo '-W: the wall time (default 4:00)'
 	   echo '-P: the account (default acc_sealfs01a)'
+	   echo '-K: keep going'
 	   echo '-q: the queue (default premimum)'
 	   echo '-n: the number of CPUs (default 1)'
 	   echo '-R: resources (default \"rusage[mem=4000]\")'
@@ -46,5 +50,5 @@ mkdir -p log/cluster
 
 set -x
 
-snakemake -j 9999 --cluster-config $jsonfile --cluster "bsub $cmdm -W $optW -P $optP $cmdx -q $optq -n $optn -R $optR -oo {cluster.output} -eo {cluster.error} -J {cluster.name}" "$@"
+snakemake -j 9999 --cluster-config $jsonfile --cluster "bsub $cmdm $cmdK -W $optW -P $optP $cmdx -q $optq -n $optn -R $optR -oo {cluster.output} -eo {cluster.error} -J {cluster.name}" "$@"
 

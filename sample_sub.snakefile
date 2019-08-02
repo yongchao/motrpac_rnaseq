@@ -3,6 +3,8 @@
 #and generate the important variables, gdir, samples, fastq_ini, fastq, fastqc_samples, R2, I, trim_input
 #functions R2_info and fastq_info
 
+#this is important for all of the sorting command
+shell.prefix("export LC_ALL=C; export LC_LANG=C;")
 
 root=os.environ['MOTRPAC_root']
 if "genome" in config:
