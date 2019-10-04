@@ -89,7 +89,7 @@ id2<-tolower(id)
 colnames(qc53)[1:6]<-c(paste0("%",id2),"median_5_3_bias")
 
 id<-grep("^%",colnames(qc53))
-qc53[,id]<-qc53[,id]*10]
+qc53[,id]<-qc53[,id]*100
 qc53<-round(qc53,dig=3)
 
 ##collect data for rRNA, globin and phix and duplicates when present
