@@ -18,7 +18,7 @@ cmdm=""
 cmdx=""
 cmdK=""
 
-while getopts j:W:P:q:n:R:m:hx o 
+while getopts j:W:P:q:n:R:m:hxK o 
 do      
     case "$o" in
         j) jsonfile="$OPTARG";;
