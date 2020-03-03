@@ -11,7 +11,6 @@ set -eux -o pipefail
 jsonfile=$MOTRPAC_root/config/lsf.json
 optn="{cluster.nCPUs}"
 optW="{cluster.time}"
-optG="" #sealfons01a
 optP="{cluster.account}"
 optq="{cluster.queue}"
 optR="{cluster.resources}"
@@ -19,12 +18,11 @@ cmdm=""
 cmdx=""
 cmdK=""
 
-while getopts j:W:P:q:n:R:m:G:hxK o 
+while getopts j:W:P:q:n:R:m:hxK o 
 do      
     case "$o" in
         j) jsonfile="$OPTARG";;
         W) optW="$OPTARG";;
-	G) optG="-G $OPTARG";;
 	P) optP="$OPTARG";;
 	q) optq="$OPTARG";;
 	n) optn="$OPTARG";;
@@ -32,14 +30,14 @@ do
 	m) cmdm="-m $OPTARG";;
 	x) cmdx="-sla Sealfon";;
 	K) cmdK="-K";;
-        h) echo "Usage: $0 [-h] [-j json] [-W wall_time] [-P account] [-K] [-q queue] [-G group] [-p proj] [-- -s snakefile and other snakemake options]"
+        h) echo "Usage: $0 [-h] [-j json] [-W wall_time] [-P account] [-K] [-q queue] [-p proj] [-- -s snakefile and other snakemake options]"
            echo '-h: print help'
 	   echo "-j: the json file (default $MOTRPAC_ROOT/config/lsf.json)"
-           echo '-W: the wall time (default 4:00)'
+           echo '-W: the wall time (default {cluster.time})'
 	   echo '-P: the account (default acc_sealfs01a)'
 	   echo '-q: the queue (default premimum)'
-	   echo '-n: the number of CPUs (default 1)'
-	   echo '-R: resources (default \"rusage[mem=4000]\")'
+	   echo '-n: the number of CPUs (default {cluster.nCPUs})'
+	   echo '-R: resources (default {cluster.resources})'
 	   echo '-m: restrict the machine types (mothra, mandra,bode)'
 	   echo '-K: no exit'
            exit 0;;
