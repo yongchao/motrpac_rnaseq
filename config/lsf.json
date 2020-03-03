@@ -94,6 +94,11 @@
         "nCPUs"     : "6",
         "resources" : "\"rusage[mem=7000] span[hosts=1]\""
     },
+    "onesample_rrbs" :
+    {
+        "nCPUs"     : "12",
+        "resources" : "\"rusage[mem=4000] span[hosts=1]\""
+    },
     "allsamples" :
     {
         "nCPUs"     : "6",
@@ -109,7 +114,7 @@
     },
     "mark_dup":
     {
-        "resources" : "\"rusage[mem=40000]\"",
+        "resources" : "\"rusage[mem=40000]\""
     },
     "qc_all":
     {

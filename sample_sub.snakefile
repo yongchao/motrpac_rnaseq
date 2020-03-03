@@ -123,7 +123,7 @@ rule UMI_attach:
     input:
         "fastq_raw/{sample}.fastq.gz"
     output:
-        "fastq_attach/{sample}.fastq.gz"
+        temp("fastq_attach/{sample}.fastq.gz")
     log:
         "fastq_attach/log/{sample}.log"
     shell:
