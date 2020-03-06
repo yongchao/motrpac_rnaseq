@@ -116,6 +116,14 @@
     {
         "resources" : "\"rusage[mem=40000]\""
     },
+    "UMI_dup":
+    {
+        "resources" : "\"rusage[mem=18000]\""
+    },
+    "featureCounts":
+    {
+        "resources" : "\"rusage[mem=18000]\""
+    },
     "qc_all":
     {
         "name"      : "{rule}",

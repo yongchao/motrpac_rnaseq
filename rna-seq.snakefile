@@ -90,6 +90,7 @@ rule UMI_dup:
 	input:"star_align/{sample}/Aligned.sortedByCoord.out.bam"
 	output:"star_align/{sample}/{sample}_dup_log.txt"
 	log:"star_align/{sample}/UMI_dup.log"
+	threads: 3
 	params:
 		R2_info
 	shell:
@@ -117,7 +118,7 @@ rule featureCounts:
 		"star_align/{sample}/Aligned.sortedByCoord.out.bam"
 	output:
 		"featureCounts/{sample}"
-	threads: 1
+	threads: 3
 	log:
 		"featureCounts/log/{sample}.log"
 	params:
