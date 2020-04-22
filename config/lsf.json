@@ -122,7 +122,8 @@
     },
     "featureCounts":
     {
-        "resources" : "\"rusage[mem=18000]\""
+        "nCPUs"     : "6",
+        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
     },
     "qc_all":
     {

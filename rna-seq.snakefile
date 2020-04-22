@@ -118,7 +118,7 @@ rule featureCounts:
 		"star_align/{sample}/Aligned.sortedByCoord.out.bam"
 	output:
 		"featureCounts/{sample}"
-	threads: 3
+	threads: 6
 	log:
 		"featureCounts/log/{sample}.log"
 	params:
