@@ -114,7 +114,7 @@
     },
     "mark_dup":
     {
-        "resources" : "\"rusage[mem=40000]\""
+        "resources" : "\"rusage[mem=60000]\""
     },
     "UMI_dup":
     {

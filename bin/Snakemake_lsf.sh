@@ -28,7 +28,7 @@ do
 	n) optn="$OPTARG";;
 	R) optR="$OPTARG";;
 	m) cmdm="-m $OPTARG";;
-	x) cmdx="-sla Sealfon";;
+	x) cmdx="-sla Sealfon_sla";;
 	K) cmdK="-K";;
         h) echo "Usage: $0 [-h] [-j json] [-W wall_time] [-P account] [-K] [-q queue] [-p proj] [-- -s snakefile and other snakemake options]"
            echo '-h: print help'
