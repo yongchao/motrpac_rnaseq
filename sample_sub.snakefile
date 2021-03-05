@@ -4,7 +4,7 @@
 #functions R2_info and fastq_info
 
 #this is important for all of the sorting command
-shell.prefix("export LC_ALL=C; export LC_LANG=C;")
+shell.prefix("export LC_ALL=C; export LC_LANG=C; set -euo pipefail; ")
 
 root=os.environ['MOTRPAC_root']
 if "genome" in config:
@@ -12,12 +12,25 @@ if "genome" in config:
 else:
     gdir=os.environ['MOTRPAC_refdata']+"/hg38_gencode_v30"
 
+
+## methcap switch 
+if "methcap" in config:
+    methcap=0
+else:
+	methcap=1
+
 #setup tmpdir is only necessary for someplatforms where tmpdir is much faster than the NFS.
 #default to be ".".
 if "tmpdir" in config:
     tmpdir=config['tmpdir']
 else:
     tmpdir=os.getenv('MOTRPAC_tmpdir', ".")
+
+
+if "multNmax" in config:
+    multNmax=config['multNmax']
+else:
+    multNmax=0
 
 #If softlinks fastq_raw to fastq folder, then no trim is happening
     

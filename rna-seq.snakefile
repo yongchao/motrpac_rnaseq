@@ -73,7 +73,7 @@ rule star_align:
 	threads: 6
 	shell:
 		'''
-		star_align.sh {gdir} {threads} {tmpdir} {input} >&{log}
+		star_align.sh {gdir} {threads} {tmpdir} {multNmax} {input} >&{log}
 		'''
 
 rule chr_info:
@@ -273,10 +273,11 @@ rule pre_align_QC:
 		multiqc.sh pre_align fastqc $fastqc_raw >&{log}
 		echo OK >{output}
 		'''
+
 dup_input=expand("mark_dup/{sample}.dup_metrics",sample=samples)
 if I==len(samples):
 	dup_input.extend(expand("star_align/{sample}/{sample}_dup_log.txt",sample=samples))
-	
+#print(dup_input)	
 
 rule qc_all:
 	input:

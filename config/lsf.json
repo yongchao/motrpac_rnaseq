@@ -13,7 +13,7 @@
 
     "star_index" :
     {
-        "nCPUs"     : "6",
+        "nCPUs"     : "8",
         "resources" : "\"rusage[mem=6000] span[hosts=1]\"",
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out",
@@ -76,13 +76,24 @@
     },
     "bismark":
     {
-        "nCPUs"     : "12",
-        "resources" : "\"rusage[mem=4000] span[hosts=1]\""
+        "nCPUs"     : "20",
+        "resources" : "\"rusage[mem=5000] span[hosts=1]\""
+    },
+    "bismark_single":
+    {
+        "nCPUs"     : "20",
+        "resources" : "\"rusage[mem=5000] span[hosts=1]\""
+    },
+
+    "bismark_merge":
+    {
+        "nCPUs"     : "18",
+        "resources" : "\"rusage[mem=5000] span[hosts=1]\""
     },
     "bismark_lambda":
     {
-        "nCPUs"     : "12",
-        "resources" : "\"rusage[mem=4000] span[hosts=1]\""
+        "nCPUs"     : "20",
+        "resources" : "\"rusage[mem=5000] span[hosts=1]\""
     },
     "rsem" :
     {
@@ -118,7 +129,7 @@
     },
     "UMI_dup":
     {
-        "resources" : "\"rusage[mem=18000]\""
+        "resources" : "\"rusage[mem=36000]\""
     },
     "featureCounts":
     {

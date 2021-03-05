@@ -38,17 +38,17 @@ conda config --prepend channels bioconda
 
 conda install \
       python=3.6.6 \
-      snakemake=5.3.0\
-      star=2.7.0d\
+      snakemake=5.3.0 \
+      star=2.7.0d \
       cutadapt=1.18 \
       picard=2.18.16 \
       samtools=1.3.1 \
       r-base=3.4.1 \
       rsem=1.3.1 \
       multiqc=1.6 \
-      bowtie2=2.3.4.3\
+      bowtie2=2.3.4.3 \
       fastqc=0.11.8 \
-      bismark=0.20.0\
+      bismark=0.20.0 \
       subread=1.6.3\
-      ucsc-gtftogenepred=366\
+      ucsc-gtftogenepred=366 \
       gawk=4.2.1

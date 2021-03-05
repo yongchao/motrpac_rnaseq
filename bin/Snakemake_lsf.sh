@@ -8,7 +8,10 @@ set -eux -o pipefail
 #-n nCPU
 #-R resource
 #-m mothra
-jsonfile=$MOTRPAC_root/config/lsf.json
+
+if [[ -z ${jsonfile+xxx} ]] || [[ -z $jsonfile ]]; then
+    jsonfile=$MOTRPAC_root/config/lsf.json
+fi
 optn="{cluster.nCPUs}"
 optW="{cluster.time}"
 optP="{cluster.account}"
@@ -32,7 +35,7 @@ do
 	K) cmdK="-K";;
         h) echo "Usage: $0 [-h] [-j json] [-W wall_time] [-P account] [-K] [-q queue] [-p proj] [-- -s snakefile and other snakemake options]"
            echo '-h: print help'
-	   echo "-j: the json file (default $MOTRPAC_ROOT/config/lsf.json)"
+	   echo "-j: the json file (default $MOTRPAC_root/config/lsf.json)"
            echo '-W: the wall time (default {cluster.time})'
 	   echo '-P: the account (default acc_sealfs01a)'
 	   echo '-q: the queue (default premimum)'
