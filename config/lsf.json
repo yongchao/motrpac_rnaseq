@@ -77,11 +77,13 @@
     "bismark":
     {
         "nCPUs"     : "20",
+        "time"      : "48:00",
         "resources" : "\"rusage[mem=5000] span[hosts=1]\""
     },
     "bismark_single":
     {
         "nCPUs"     : "20",
+        "time"      : "48:00",
         "resources" : "\"rusage[mem=5000] span[hosts=1]\""
     },
 
@@ -98,7 +100,7 @@
     "rsem" :
     {
         "nCPUs"     : "6",
-        "resources" : "\"rusage[mem=6000] span[hosts=1]\""
+        "resources" : "\"rusage[mem=8000] span[hosts=1]\""
     },
     "onesample" :
     {
@@ -129,7 +131,7 @@
     },
     "UMI_dup":
     {
-        "resources" : "\"rusage[mem=36000]\""
+        "resources" : "\"rusage[mem=60000]\""
     },
     "featureCounts":
     {
@@ -152,7 +154,7 @@
     "pre_align_QC":
     {
         "name"      : "{rule}",
-        "resources" : "\"rusage[mem=40000]\"",
+        "resources" : "\"rusage[mem=60000]\"",
         "output"    : "log/cluster/{rule}.out",
         "error"     : "log/cluster/{rule}.err"
     },
@@ -161,5 +163,10 @@
         "name"      : "{rule}",
         "output"    : "log/cluster/{rule}.out",
         "error"     : "log/cluster/{rule}.err"
+    },
+    "methcap_cov" :
+    {
+        "nCPUs"     : "6",
+        "resources" : "\"rusage[mem=20000] span[hosts=1]\""
     },
 }

@@ -15,9 +15,9 @@ else:
 
 ## methcap switch 
 if "methcap" in config:
-    methcap=0
+    methcap=1
 else:
-	methcap=1
+	methcap=0
 
 #setup tmpdir is only necessary for someplatforms where tmpdir is much faster than the NFS.
 #default to be ".".
