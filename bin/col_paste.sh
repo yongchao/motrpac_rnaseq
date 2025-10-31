@@ -12,7 +12,7 @@ set -euo pipefail
 ##And Tab delimited file
 
 mkdir -p tmpdir
-tmpdir=$(mktemp -d -p $MOTRPAC_tmp col_paste.XXXX) #create a temp folder to be easier to be removed
+tmpdir=$(mktemp -d -p . col_paste.XXXX) #create a temp folder to be easier to be removed
 optskip=0
 optinfo=1
 optcol=0
