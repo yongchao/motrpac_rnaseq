@@ -23,6 +23,7 @@ bsub -K -q premium -n $threads -R "rusage[mem=$mem] span[hosts=1]" \
     --mask-short-adapter-reads 0 \
     --minimum-trimmed-read-length 0 \
     -o . \
+    --no-lane-splitting \
     --interop-dir interop "$@"
 
 ln -fs ./Reports/html/*/all/all/all/laneBarcode.html .
